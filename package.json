@@ -1,0 +1,51 @@
+{
+  "name": "@ba/splitview",
+  "version": "1.0.0",
+  "description": "Split view resize",
+  "main": "dist/splitview.js",
+  "minified:main": "dist/splitview.min.js",
+  "module": "dist/splitview.es.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run del && rollup -c",
+    "watch": "npm run del && rollup -cw",
+    "release": "npm version",
+    "postrelease": "npm publish && npm run push",
+    "push": "git push origin master --tags",
+    "del": "rimraf ./dist"
+  },
+  "dependencies": {
+    "split.js": "^1.6.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.13",
+    "@babel/plugin-proposal-object-rest-spread": "^7.12.13",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "eslint": "^7.20.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.39.0",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.pba.su/pba/splitview.git"
+  },
+  "author": "npc.ba",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.pba.su/pba/splitview/-/issues"
+  },
+  "homepage": "https://gitlab.pba.su/pba/splitview#readme",
+  "publishConfig": {
+    "registry": "https://nexus.npc.ba/repository/npm-private/",
+    "_authToken": "NpmToken.73d85e6f-6467-3c35-8481-cec4ff63f4a8"
+  }
+}
