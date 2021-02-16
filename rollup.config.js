@@ -1,6 +1,7 @@
 import babel from "@rollup/plugin-babel"
 import { terser } from "rollup-plugin-terser"
 import resolve from "@rollup/plugin-node-resolve"
+import css from "rollup-plugin-import-css"
 
 const pkg = require("./package.json")
 
@@ -35,7 +36,8 @@ export default [
       resolve(),
       babel({
         babelHelpers: "bundled"
-      })
+      }),
+      css({ output: "splitview.css" })
     ]
   },
   {
@@ -50,6 +52,10 @@ export default [
       resolve(),
       babel({
         babelHelpers: "bundled"
+      }),
+      css({
+        output: "splitview.min.css",
+        minify: true
       }),
       terser()
     ]
