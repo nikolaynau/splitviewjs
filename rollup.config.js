@@ -2,22 +2,26 @@ import babel from "@rollup/plugin-babel"
 import { terser } from "rollup-plugin-terser"
 import resolve from "@rollup/plugin-node-resolve"
 import css from "rollup-plugin-import-css"
-
-const pkg = require("./package.json")
+import serve from "rollup-plugin-serve"
+import copy from 'rollup-plugin-copy'
+import pkg from "./package.json"
+const isDevelopment = process.env.NODE_ENV === "development";
 
 const output = {
   globals: {
-    "split.js": "Split"
+    "split.js": "Split",
+    "eventemitter3": "EventEmitter"
   },
   format: "umd",
-  file: pkg.main,
-  name: "splitview",
+  file: "dist/splitview.js",
+  name: "SplitView",
   sourcemap: false,
   banner: `/*! @ba/splitview - v${pkg.version} */\n`,
 }
 
 const external = [
-  "split.js"
+  "split.js",
+  "eventemitter3"
 ]
 
 export default [
@@ -37,7 +41,14 @@ export default [
       babel({
         babelHelpers: "bundled"
       }),
-      css({ output: "splitview.css" })
+      css({ output: "splitview.css" }),
+      copy({
+        targets: [
+          { src: "demo/index.html", dest: "dist" },
+
+        ]
+      }),
+      ...(isDevelopment ? [serve("dist")] : [])
     ]
   },
   {
@@ -45,7 +56,7 @@ export default [
     output: {
       ...output,
       sourcemap: true,
-      file: pkg["minified:main"],
+      file: "dist/splitview.min.js",
     },
     external,
     plugins: [

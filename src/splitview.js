@@ -1,9 +1,12 @@
-import Split from "split.js"
+import SplitAbsolute from "./split-absolute";
+import SplitPercent from "./split-percent";
 
-class SplitView {
-  constructor() {
-    var split = Split([]);
+export default (panes, options) => {
+  const usePercent = options?.percent ?? true;
+
+  if (usePercent) {
+    return new SplitPercent(panes, options);
+  } else {
+    return new SplitAbsolute(panes, options);
   }
-}
-
-export default SplitView;
+};

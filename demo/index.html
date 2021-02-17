@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splitview</title>
+  <link rel="stylesheet" href="splitview.css">
+  <script src="https://unpkg.com/split.js@1.6.2/dist/split.js"></script>
+  <script src="  https://unpkg.com/eventemitter3@4.0.7/index.js"></script>
+  <script src="splitview.js"></script>
+  <style>
+    html,
+    boby {
+      padding: 0;
+      margin: 0;
+    }
+
+    .demo-container {
+      height: 300px;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="demo-container">
+    <h3>Default SplitView (percent)</h3>
+    <div class="sv-splitview">
+      <div id="pane1" class="sv-splitview__pane"></div>
+      <div id="pane2" class="sv-splitview__pane"></div>
+      <div id="pane3" class="sv-splitview__pane"></div>
+    </div>
+  </div>
+  <script>
+    var panes = [
+      document.getElementById("pane1"),
+      document.getElementById("pane2"),
+      document.getElementById("pane3")
+    ]
+    var splitview = SplitView(panes)
+  </script>
+</body>
+
+</html>
