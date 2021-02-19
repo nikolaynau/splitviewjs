@@ -1,5 +1,7 @@
 # splitview
 
+> SplitView implementation based on Split.js
+
 ## Installation
 
 ```bash

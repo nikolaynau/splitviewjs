@@ -1,7 +1,7 @@
 {
   "name": "@ba/splitview",
   "version": "1.0.0",
-  "description": "Split view resize",
+  "description": "SplitView implementation based on Split.js",
   "main": "dist/splitview.js",
   "module": "dist/splitview.es.js",
   "files": [
