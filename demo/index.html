@@ -27,6 +27,10 @@
       margin-bottom: 30px;
     }
 
+    .buttons {
+      margin-bottom: 30px;
+    }
+
     .paneA {
       background-color: rebeccapurple;
     }
@@ -42,6 +46,11 @@
     .my-gutter {
       background-color: black;
     }
+
+    .my-gutter-absolute {
+      background-color: black;
+      opacity: 0.1;
+    }
   </style>
 </head>
 
@@ -55,6 +64,11 @@
     </div>
   </div>
 
+  <div class="buttons">
+    <button id="collapse">Collapse</button>
+    <button id="destroy">Destroy</button>
+  </div>
+
   <h3>Default SplitView (percent, horizontal)</h3>
   <div class="demo-container">
     <div>
@@ -63,8 +77,45 @@
       <div class="paneC" id="pane6"></div>
     </div>
   </div>
+
+  <h3>Default SplitView (percent, size, minSize)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane7"></div>
+      <div class="paneB" id="pane8"></div>
+      <div class="paneC" id="pane9"></div>
+    </div>
+  </div>
+
+  <h3>Default SplitView (percent, snap)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane10"></div>
+      <div class="paneB" id="pane11"></div>
+      <div class="paneC" id="pane12"></div>
+    </div>
+  </div>
+
+  <h3>Default SplitView (absolute, vertical)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane13"></div>
+      <div class="paneB" id="pane14"></div>
+      <div class="paneC" id="pane15"></div>
+    </div>
+  </div>
+
+  <h3>Default SplitView (absolute, horizontal)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane16"></div>
+      <div class="paneB" id="pane17"></div>
+      <div class="paneC" id="pane18"></div>
+    </div>
+  </div>
   <script>
-    SplitView([
+    // Default SplitView (percent, vertical)
+    var sv1 = SplitView([
       document.getElementById("pane1"),
       document.getElementById("pane2"),
       document.getElementById("pane3")
@@ -72,6 +123,7 @@
       customGutterClassName: "my-gutter"
     });
 
+    // Default SplitView (percent, horizontal)
     SplitView([
       document.getElementById("pane4"),
       document.getElementById("pane5"),
@@ -80,6 +132,79 @@
       customGutterClassName: "my-gutter",
       direction: "horizontal"
     });
+
+    // Default SplitView (percent, size, minSize)
+    SplitView([
+      {
+        element: document.getElementById("pane7"),
+        size: 30, // in %
+        minSize: 100 // in px
+      },
+      {
+        element: document.getElementById("pane8"),
+        size: 50, //%
+        minSize: 300 //px
+      },
+      {
+        element: document.getElementById("pane9"),
+        size: 20, //%
+        minSize: 30 //px
+      }
+    ], {
+      customGutterClassName: "my-gutter"
+    });
+
+    // Default SplitView (percent, snap)
+    SplitView([
+      {
+        element: document.getElementById("pane10"),
+        size: 30, // in %
+        minSize: 20 // in px
+      },
+      {
+        element: document.getElementById("pane11"),
+        size: 50, //%
+        minSize: 20 //px
+      },
+      {
+        element: document.getElementById("pane12"),
+        size: 20, //%
+        minSize: 0 //px
+      }
+    ], {
+      customGutterClassName: "my-gutter",
+      snapOffset: 30
+    });
+
+    // Default SplitView (absolute, vertical)
+    SplitView([
+      document.getElementById("pane13"),
+      document.getElementById("pane14"),
+      document.getElementById("pane15")
+    ], {
+      customGutterClassName: "my-gutter-absolute",
+      gutterMode: "absolute"
+    });
+
+    // Default SplitView (absolute, horizontal)
+    SplitView([
+      document.getElementById("pane16"),
+      document.getElementById("pane17"),
+      document.getElementById("pane18")
+    ], {
+      customGutterClassName: "my-gutter-absolute",
+      direction: "horizontal",
+      gutterMode: "absolute"
+    });
+
+    // Buttons
+    document.getElementById("collapse").addEventListener("click", function () {
+      sv1.collapsePaneAt(0);
+    });
+
+    document.getElementById("destroy").addEventListener("click", function () {
+      sv1.destroy();
+    })
   </script>
 </body>
 

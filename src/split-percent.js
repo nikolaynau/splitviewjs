@@ -26,6 +26,7 @@ const defaultOptions = {
 }
 
 const defaultPaneOptions = {
+  id: null,
   element: null,
   size: 0,
   minSize: 0
@@ -39,6 +40,10 @@ const defaultClassNames = {
   gutterClassName: "sp-splitview__gutter",
   gutterAbsoluteClassName: "sp-splitview__gutter--absolute",
   customGutterClassName: null
+}
+
+function isDefined(value) {
+  return value !== null && value !== undefined;
 }
 
 class SplitPercent extends EventEmitter {
@@ -137,6 +142,7 @@ class SplitPercent extends EventEmitter {
 
   createGutter() {
     let gutterElement = this.options.createGutter?.();
+
     if (!gutterElement) {
       gutterElement = document.createElement("div");
     }
@@ -190,7 +196,6 @@ class SplitPercent extends EventEmitter {
   }
 
   updateGutters(paneSizes) {
-    debugger
     const prop = this.options.direction === Direction.Vertical ? "left" : "top";
     const halfGutSize = this.options.gutterSize / 2;
     let accumulatedSize = 0;
@@ -198,7 +203,7 @@ class SplitPercent extends EventEmitter {
     for (let i = 0; i < this.gutterElements.length; i++) {
       const gutterElement = this.gutterElements[i];
 
-      if (paneSizes[i]) {
+      if (isDefined(paneSizes[i])) {
         accumulatedSize += paneSizes[i];
         gutterElement.style[prop] = `calc(${accumulatedSize}% - ${halfGutSize}px)`;
       }
@@ -209,12 +214,19 @@ class SplitPercent extends EventEmitter {
     return this.options.gutterMode === GutterMode.Absolute;
   }
 
-  collapsePane(index) {
-    debugger
+  collapsePaneAt(index) {
     this.splitter.collapse(index);
 
     if (this.isGutterAbsolute) {
       this.updateGutters(this.splitter.getSizes());
+    }
+  }
+
+  collapsePane(id) {
+    const index = this.panes.findIndex(pane => pane.id === id);
+
+    if (index !== -1) {
+      this.collapsePaneAt(index);
     }
   }
 
@@ -243,8 +255,8 @@ class SplitPercent extends EventEmitter {
   }
 
   destroy() {
-    debugger
-    this.splitter?.destroy()
+    this.removeAllListeners();
+    this.splitter?.destroy();
     this.splitter = null;
     this.panes = null;
     this.options = null;
