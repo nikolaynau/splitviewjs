@@ -1,0 +1,55 @@
+.sp-splitview {
+  /* display styles */
+  display: flex;
+  position: relative;
+
+  /* sizes */
+  width: 100%;
+  height: 100%;
+}
+
+.sp-splitview--horizontal {
+  flex-direction: column;
+}
+
+.sp-splitview--vertical {
+  flex-direction: row;
+}
+
+.sp-splitview__pane {
+  /* display styles */
+  overflow: hidden;
+}
+
+.sp-splitview--horizontal > .sp-splitview__pane {
+  /* sizes */
+  width: 100%;
+}
+
+.sp-splitview--vertical > .sp-splitview__pane {
+  /* sizes */
+  height: 100%;
+}
+
+.sp-splitview__gutter--absolute {
+  /* display styles */
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.sp-splitview--vertical > .sp-splitview__gutter {
+  /* sizes */
+  height: 100%;
+
+  /* cursor */
+  cursor: col-resize;
+}
+
+.sp-splitview--horizontal > .sp-splitview__gutter {
+  /* sizes */
+  width: 100%;
+
+  /* cursor */
+  cursor: row-resize;
+}

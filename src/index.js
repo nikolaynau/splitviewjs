@@ -1,4 +1,5 @@
 import SplitView from "./splitview";
-import "./splitview.css";
+import "./split-percent.css";
+import "./split-absolute.css";
 
 export default SplitView;

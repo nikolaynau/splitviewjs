@@ -9,6 +9,7 @@
     "dist"
   ],
   "scripts": {
+    "start": "npm run dev",
     "build": "npm run del && rollup -c",
     "watch": "npm run del && rollup -cw",
     "dev": "cross-env NODE_ENV=development npm run watch",

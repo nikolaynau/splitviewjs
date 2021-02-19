@@ -5,41 +5,81 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Splitview</title>
+  <title>SplitView</title>
   <link rel="stylesheet" href="splitview.css">
   <script src="https://unpkg.com/split.js@1.6.2/dist/split.js"></script>
   <script src="  https://unpkg.com/eventemitter3@4.0.7/index.js"></script>
   <script src="splitview.js"></script>
   <style>
     html,
-    boby {
+    body {
       padding: 0;
       margin: 0;
+    }
+
+    body {
+      padding: 1rem;
     }
 
     .demo-container {
       height: 300px;
       width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .paneA {
+      background-color: rebeccapurple;
+    }
+
+    .paneB {
+      background-color: royalblue;
+    }
+
+    .paneC {
+      background-color: seagreen;
+    }
+
+    .my-gutter {
+      background-color: black;
     }
   </style>
 </head>
 
 <body>
+  <h3>Default SplitView (percent, vertical)</h3>
   <div class="demo-container">
-    <h3>Default SplitView (percent)</h3>
-    <div class="sv-splitview">
-      <div id="pane1" class="sv-splitview__pane"></div>
-      <div id="pane2" class="sv-splitview__pane"></div>
-      <div id="pane3" class="sv-splitview__pane"></div>
+    <div>
+      <div class="paneA" id="pane1"></div>
+      <div class="paneB" id="pane2"></div>
+      <div class="paneC" id="pane3"></div>
+    </div>
+  </div>
+
+  <h3>Default SplitView (percent, horizontal)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane4"></div>
+      <div class="paneB" id="pane5"></div>
+      <div class="paneC" id="pane6"></div>
     </div>
   </div>
   <script>
-    var panes = [
+    SplitView([
       document.getElementById("pane1"),
       document.getElementById("pane2"),
       document.getElementById("pane3")
-    ]
-    var splitview = SplitView(panes)
+    ], {
+      customGutterClassName: "my-gutter"
+    });
+
+    SplitView([
+      document.getElementById("pane4"),
+      document.getElementById("pane5"),
+      document.getElementById("pane6")
+    ], {
+      customGutterClassName: "my-gutter",
+      direction: "horizontal"
+    });
   </script>
 </body>
 
