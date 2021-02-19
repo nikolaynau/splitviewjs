@@ -16,15 +16,14 @@ const panes = [
   document.getElementById('pane1'),
   document.getElementById('pane2')
 ];
-
-const splitview = new SplitView(panes, options);
+const splitview = SplitView(panes, options);
 ```
 
 Default html template
 
 ```html
-<div class="sv-splitview">
-  <div id="pane1" class="sv-splitview__pane"></div>
-  <div id="pane2" class="sv-splitview__pane"></div>
+<div>
+  <div id="pane1"></div>
+  <div id="pane2"></div>
 </div>
 ```
