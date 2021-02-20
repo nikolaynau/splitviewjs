@@ -1,5 +1,6 @@
 import Split from "split.js"
 import EventEmitter from "eventemitter3"
+import { isDefined } from "./utils"
 
 const GutterMode = Object.freeze({
   Embed: "embed",
@@ -40,10 +41,6 @@ const defaultClassNames = {
   gutterClassName: "sp-splitview__gutter",
   gutterAbsoluteClassName: "sp-splitview__gutter--absolute",
   customGutterClassName: null
-}
-
-function isDefined(value) {
-  return value !== null && value !== undefined;
 }
 
 class SplitPercent extends EventEmitter {
@@ -158,12 +155,12 @@ class SplitPercent extends EventEmitter {
       this.gutterElements.push(gutterElement);
     }
 
-    this.emit("gutter-created", gutterElement);
+    this.emit("gutter-created", gutterElement, this);
     return gutterElement;
   }
 
-  setElementStyle(dimension, size, gutterSize) {
-    const customProps = this.options.elementStyle?.(dimension, size, gutterSize);
+  setElementStyle(dimension, size, gutterSize, index) {
+    const customProps = this.options.elementStyle?.(dimension, size, gutterSize, index);
 
     if (this.isGutterAbsolute) {
       return {
@@ -235,7 +232,7 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("before-resize", paneSizes);
+    this.emit("before-resize", paneSizes, this);
   }
 
   onDragEnd(paneSizes) {
@@ -243,7 +240,7 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("resized", paneSizes);
+    this.emit("resized", paneSizes, this);
   }
 
   onDrag(paneSizes) {
@@ -251,7 +248,7 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("resize", paneSizes);
+    this.emit("resize", paneSizes, this);
   }
 
   destroy() {

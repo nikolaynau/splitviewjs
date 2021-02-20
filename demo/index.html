@@ -47,7 +47,7 @@
       background-color: black;
     }
 
-    .my-gutter-absolute {
+    .my-gutter2 {
       background-color: black;
       opacity: 0.1;
     }
@@ -96,7 +96,7 @@
     </div>
   </div>
 
-  <h3>Default SplitView (absolute, vertical)</h3>
+  <h3>Default SplitView (percent, gutter absolute, vertical)</h3>
   <div class="demo-container">
     <div>
       <div class="paneA" id="pane13"></div>
@@ -105,7 +105,7 @@
     </div>
   </div>
 
-  <h3>Default SplitView (absolute, horizontal)</h3>
+  <h3>Default SplitView (percent, gutter absolute, horizontal)</h3>
   <div class="demo-container">
     <div>
       <div class="paneA" id="pane16"></div>
@@ -113,6 +113,34 @@
       <div class="paneC" id="pane18"></div>
     </div>
   </div>
+
+  <h3>Default SplitView (absolute, vertical)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane19"></div>
+      <div class="paneB" id="pane20"></div>
+      <div class="paneC" id="pane21"></div>
+    </div>
+  </div>
+
+  <h3>Default SplitView (absolute, horizontal)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane22"></div>
+      <div class="paneB" id="pane23"></div>
+      <div class="paneC" id="pane24"></div>
+    </div>
+  </div>
+
+  <h3>Default SplitView (absolute, size, minSize)</h3>
+  <div class="demo-container">
+    <div>
+      <div class="paneA" id="pane25"></div>
+      <div class="paneB" id="pane26"></div>
+      <div class="paneC" id="pane27"></div>
+    </div>
+  </div>
+
   <script>
     // Default SplitView (percent, vertical)
     var sv1 = SplitView([
@@ -176,23 +204,23 @@
       snapOffset: 30
     });
 
-    // Default SplitView (absolute, vertical)
+    // Default SplitView (percent, gutter absolute, vertical)
     SplitView([
       document.getElementById("pane13"),
       document.getElementById("pane14"),
       document.getElementById("pane15")
     ], {
-      customGutterClassName: "my-gutter-absolute",
+      customGutterClassName: "my-gutter2",
       gutterMode: "absolute"
     });
 
-    // Default SplitView (absolute, horizontal)
+    // Default SplitView (percent, gutter absolute, horizontal)
     SplitView([
       document.getElementById("pane16"),
       document.getElementById("pane17"),
       document.getElementById("pane18")
     ], {
-      customGutterClassName: "my-gutter-absolute",
+      customGutterClassName: "my-gutter2",
       direction: "horizontal",
       gutterMode: "absolute"
     });
@@ -205,6 +233,55 @@
     document.getElementById("destroy").addEventListener("click", function () {
       sv1.destroy();
     })
+
+    // Default SplitView (absolute, vertical)
+    var sv3 = SplitView([
+      document.getElementById("pane19"),
+      document.getElementById("pane20"),
+      document.getElementById("pane21")
+    ], {
+      customGutterClassName: "my-gutter2",
+      percent: false
+    });
+
+    // Default SplitView (absolute, horizontal)
+    SplitView([
+      document.getElementById("pane22"),
+      document.getElementById("pane23"),
+      document.getElementById("pane24")
+    ], {
+      customGutterClassName: "my-gutter2",
+      direction: "horizontal",
+      percent: false
+    });
+
+    // Default SplitView (absolute, size, minSize, span)
+    var sv2 = SplitView([
+      {
+        element: document.getElementById("pane25"),
+        size: "300px",
+        minSize: 50,
+      },
+      {
+        element: document.getElementById("pane26"),
+        size: 0,
+        minSize: 200
+      },
+      {
+        element: document.getElementById("pane27"),
+        size: "20%",
+        minSize: 0
+      }
+    ], {
+      customGutterClassName: "my-gutter2",
+      percent: false,
+      snapOffset: 30
+    });
+
+    window.addEventListener("resize", () => {
+      sv2.invalidateSize();
+      sv3.invalidateSize();
+    });
   </script>
 </body>
 

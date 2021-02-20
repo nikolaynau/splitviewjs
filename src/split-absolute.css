@@ -1,3 +1,54 @@
-.sv-test {
-  border: 1px;
+.sa-splitview {
+  /* display styles */
+  position: relative;
+
+  /* sizes */
+  width: 100%;
+  height: 100%;
+}
+
+.sa-splitview__pane {
+  /* display styles */
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  /* overflow */
+  overflow: hidden;
+}
+
+.sa-splitview--horizontal > .sa-splitview__pane {
+  /* sizes */
+  width: 100%;
+}
+
+.sa-splitview--vertical > .sa-splitview__pane {
+  /* sizes */
+  height: 100%;
+}
+
+.sa-splitview__gutter {
+  /* display styles */
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  /* z-index */
+  z-index: 2;
+}
+
+.sa-splitview--vertical > .sa-splitview__gutter {
+  /* sizes */
+  height: 100%;
+
+  /* cursor */
+  cursor: col-resize;
+}
+
+.sa-splitview--horizontal > .sa-splitview__gutter {
+  /* sizes */
+  width: 100%;
+
+  /* cursor */
+  cursor: row-resize;
 }
