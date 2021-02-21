@@ -1,4 +1,4 @@
-# splitview
+# splitview.js
 
 > SplitView implementation based on [Split.js](https://github.com/nathancahill/split)
 
