@@ -1,5 +1,5 @@
 {
-  "name": "splitview",
+  "name": "splitview.js",
   "version": "1.0.0",
   "description": "SplitView implementation based on Split.js",
   "main": "dist/splitview.js",
@@ -44,6 +44,13 @@
     "type": "git",
     "url": "git+https://github.com/nikolaynau/splitview.git"
   },
+  "keywords": [
+    "css",
+    "splitview",
+    "flexbox",
+    "split-layout",
+    "split"
+  ],
   "author": "Nikolay Naumenkov",
   "license": "MIT",
   "bugs": {

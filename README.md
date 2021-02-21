@@ -7,20 +7,20 @@
 Using npm:
 
 ```bash
-npm install splitview
+npm install splitview.js
 ```
 
 Using yarn:
 
 ```bash
-yarn add splitview
+yarn add splitview.js
 ```
 
 ## Usage
 
 ```javascript
-import SplitView from 'splitview'
-import 'splitview/dist/splitview.css';
+import SplitView from 'splitview.js'
+import 'splitview.js/dist/splitview.css';
 
 const panes = [
   document.getElementById('pane1'),
