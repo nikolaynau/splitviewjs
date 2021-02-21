@@ -30,7 +30,8 @@ const defaultPaneOptions = {
   id: null,
   element: null,
   size: 0,
-  minSize: 0
+  minSize: 0,
+  disabled: false
 }
 
 const defaultClassNames = {
@@ -40,6 +41,7 @@ const defaultClassNames = {
   paneClassName: "sp-splitview__pane",
   gutterClassName: "sp-splitview__gutter",
   gutterAbsoluteClassName: "sp-splitview__gutter--absolute",
+  gutterDisabledClassName: "sp-splitview__gutter--disabled",
   customGutterClassName: null
 }
 
@@ -63,6 +65,8 @@ class SplitPercent extends EventEmitter {
     if (this.isGutterAbsolute) {
       this.updateGutters(this.splitter.getSizes());
     }
+
+    this.updateDisabledState();
   }
 
   normalizePaneOptions(panes) {
@@ -224,6 +228,43 @@ class SplitPercent extends EventEmitter {
 
     if (index !== -1) {
       this.collapsePaneAt(index);
+    }
+  }
+
+  disablePaneAt(index, value) {
+    if (this.panes[index]) {
+      this.panes[index].disabled = !!value;
+      this.updateDisabledState();
+    }
+  }
+
+  disablePane(id, value) {
+    const index = this.panes.findIndex(pane => pane.id === id);
+
+    if (index !== -1) {
+      this.disablePaneAt(index, value);
+    }
+  }
+
+  updateDisabledState() {
+    const pairs = this.splitter.pairs;
+
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i];
+      const disabled = this.panes[pair.a]?.disabled || this.panes[pair.b]?.disabled;
+      this.disableGutter(pair.gutter, disabled);
+    }
+  }
+
+  disableGutter(gutterElement, value) {
+    if (gutterElement) {
+      const classList = gutterElement.classList;
+
+      if (value) {
+        classList.add(this.options.gutterDisabledClassName);
+      } else {
+        classList.remove(this.options.gutterDisabledClassName)
+      }
     }
   }
 

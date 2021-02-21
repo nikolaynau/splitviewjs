@@ -38,6 +38,10 @@
   top: 0;
 }
 
+.sp-splitview__gutter--disabled {
+  pointer-events: none;
+}
+
 .sp-splitview--vertical > .sp-splitview__gutter {
   /* sizes */
   height: 100%;

@@ -37,6 +37,10 @@
   z-index: 2;
 }
 
+.sa-splitview__gutter--disabled {
+  pointer-events: none;
+}
+
 .sa-splitview--vertical > .sa-splitview__gutter {
   /* sizes */
   height: 100%;

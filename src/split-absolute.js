@@ -24,7 +24,8 @@ const defaultPaneOptions = {
   id: null,
   element: null,
   size: 0,
-  minSize: 0
+  minSize: 0,
+  disabled: false
 }
 
 const defaultClassNames = {
@@ -33,6 +34,7 @@ const defaultClassNames = {
   verticalClassName: "sa-splitview--vertical",
   paneClassName: "sa-splitview__pane",
   gutterClassName: "sa-splitview__gutter",
+  gutterDisabledClassName: "sa-splitview__gutter--disabled",
   customGutterClassName: null
 }
 
@@ -64,9 +66,10 @@ class SplitAbsolute extends EventEmitter {
     this.containerSize = this.getContainerSize(this.container, this.options.direction);
     this.splitter = this.createSplitter(this.panes, this.options, this.containerSize);
 
-    const sizes = this.splitter.getSizes();
-    this.updateGutters(sizes);
-    this.updatePanePositions(sizes);
+    const percentSizes = this.splitter.getSizes();
+    this.updateGutters(percentSizes);
+    this.updatePanePositions(percentSizes);
+    this.updateDisabledState();
   }
 
   normalizePaneOptions(panes) {
@@ -316,6 +319,43 @@ class SplitAbsolute extends EventEmitter {
 
     if (index !== -1) {
       this.collapsePaneAt(index);
+    }
+  }
+
+  disablePaneAt(index, value) {
+    if (this.panes[index]) {
+      this.panes[index].disabled = !!value;
+      this.updateDisabledState();
+    }
+  }
+
+  disablePane(id, value) {
+    const index = this.panes.findIndex(pane => pane.id === id);
+
+    if (index !== -1) {
+      this.disablePaneAt(index, value);
+    }
+  }
+
+  updateDisabledState() {
+    const pairs = this.splitter.pairs;
+
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i];
+      const disabled = this.panes[pair.a]?.disabled || this.panes[pair.b]?.disabled;
+      this.disableGutter(pair.gutter, disabled);
+    }
+  }
+
+  disableGutter(gutterElement, value) {
+    if (gutterElement) {
+      const classList = gutterElement.classList;
+
+      if (value) {
+        classList.add(this.options.gutterDisabledClassName);
+      } else {
+        classList.remove(this.options.gutterDisabledClassName)
+      }
     }
   }
 
