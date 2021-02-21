@@ -230,11 +230,11 @@ class SplitAbsolute extends EventEmitter {
     const oldContanerSize = this.containerSize;
     const newContainerSize = oldContanerSize + delta;
 
-    const sizes = this.splitter.getSizes()
+    const pixelSizes = this.splitter.getSizes()
       .map((percent) => (oldContanerSize * percent) / 100);
 
     const prioritySizes = this.panes.map((pane, index) => ({
-      size: sizes[index],
+      size: pixelSizes[index],
       minSize: pane.minSize,
       priority: pane.size === 0 ? 1 : 0,
       index
@@ -245,14 +245,15 @@ class SplitAbsolute extends EventEmitter {
       return b.priority - a.priority;
     });
 
-    this.priorityDistribution(prioritySizes, delta);
+    this.distributeSizes(prioritySizes, delta);
 
-    const newSizes = prioritySizes.sort((a, b) => a.index - b.index)
+    const newPercentSizes = prioritySizes.sort((a, b) => a.index - b.index)
       .map(({ size }) => (size * 100) / newContainerSize);
-    this.correctDistribution(newSizes);
+
+    this.correctDistribution(newPercentSizes);
 
     this.containerSize = newContainerSize;
-    this.splitter.setSizes(newSizes);
+    this.splitter.setSizes(newPercentSizes);
 
     const updatedSizes = this.splitter.getSizes();
     this.updateGutters(updatedSizes);
@@ -260,7 +261,7 @@ class SplitAbsolute extends EventEmitter {
     this.emit("resize", updatedSizes, this);
   }
 
-  priorityDistribution(data, delta) {
+  distributeSizes(data, delta) {
     if (data.length === 0) return;
     const first = data[0];
 
@@ -273,17 +274,17 @@ class SplitAbsolute extends EventEmitter {
 
       if (tail < 0) {
         first.size = clamp(first.minSize, first.size - (delta - Math.abs(tail)), first.size);
-        this.priorityDistribution(data.slice(1), tail);
+        this.distributeSizes(data.slice(1), tail);
       } else {
         first.size = clamp(first.minSize, first.size - delta, first.size);
       }
     }
   }
 
-  correctDistribution(sizesInPercent) {
-    const s = sum(sizesInPercent);
+  correctDistribution(percentSizes) {
+    const s = sum(percentSizes);
     const delta = 100 - s;
-    sizesInPercent[sizesInPercent.length - 1] += delta;
+    percentSizes[percentSizes.length - 1] += delta;
   }
 
   convertPecentToPx(value) {
