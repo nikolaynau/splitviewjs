@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nikolaynau/splitview.git"
+    "url": "git+https://github.com/nikolaynau/splitviewjs.git"
   },
   "keywords": [
     "css",
@@ -54,7 +54,7 @@
   "author": "Nikolay Naumenkov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nikolaynau/splitview/issues"
+    "url": "https://github.com/nikolaynau/splitviewjs/issues"
   },
-  "homepage": "https://github.com/nikolaynau/splitview#readme"
+  "homepage": "https://github.com/nikolaynau/splitviewjs#readme"
 }

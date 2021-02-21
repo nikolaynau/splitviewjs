@@ -16,7 +16,7 @@ const output = {
   file: "dist/splitview.js",
   name: "SplitView",
   sourcemap: false,
-  banner: `/*! splitview - v${pkg.version} */\n`,
+  banner: `/*! ${pkg.name} - v${pkg.version} */\n`,
 }
 
 const external = [
