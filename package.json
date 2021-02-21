@@ -1,11 +1,10 @@
 {
-  "name": "@ba/splitview",
+  "name": "splitview",
   "version": "1.0.0",
   "description": "SplitView implementation based on Split.js",
   "main": "dist/splitview.js",
   "module": "dist/splitview.es.js",
   "files": [
-    "src",
     "dist"
   ],
   "scripts": {
@@ -42,16 +41,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.pba.su/pba/splitview.git"
+    "url": "git+https://github.com/nikolaynau/splitview.git"
   },
-  "author": "npc.ba",
+  "author": "Nikolay Naumenkov",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.pba.su/pba/splitview/-/issues"
+    "url": "https://github.com/nikolaynau/splitview/issues"
   },
-  "homepage": "https://gitlab.pba.su/pba/splitview#readme",
-  "publishConfig": {
-    "registry": "https://nexus.npc.ba/repository/npm-private/",
-    "_authToken": "NpmToken.73d85e6f-6467-3c35-8481-cec4ff63f4a8"
-  }
+  "homepage": "https://github.com/nikolaynau/splitview#readme"
 }

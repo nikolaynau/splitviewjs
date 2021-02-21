@@ -1,18 +1,26 @@
 # splitview
 
-> SplitView implementation based on Split.js
+> SplitView implementation based on [Split.js](https://github.com/nathancahill/split)
 
 ## Installation
 
+Using npm:
+
 ```bash
-npm install @ba/splitview
+npm install splitview
+```
+
+Using yarn:
+
+```bash
+yarn add splitview
 ```
 
 ## Usage
 
 ```javascript
-import SplitView from '@ba/splitview'
-import "@ba/splitview/dist/splitview.css";
+import SplitView from 'splitview'
+import 'splitview/dist/splitview.css';
 
 const panes = [
   document.getElementById('pane1'),
