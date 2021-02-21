@@ -13,7 +13,8 @@
     "watch": "npm run del && rollup -cw",
     "dev": "cross-env NODE_ENV=development npm run watch",
     "release": "npm version",
-    "postrelease": "npm publish && npm run push",
+    "version": "npm run build",
+    "postversion": "npm run push1",
     "push": "git push origin master --tags",
     "del": "rimraf ./dist"
   },
