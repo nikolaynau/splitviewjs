@@ -21,6 +21,7 @@ const defaultOptions = {
   dragInterval: 1,
   direction: Direction.Vertical,
   cursor: "col-resize",
+  animationDuration: 300,
   createGutter: null,
   elementStyle: null,
   gutterStyle: null
@@ -39,6 +40,9 @@ const defaultClassNames = {
   horizontalClassName: "sp-splitview--horizontal",
   verticalClassName: "sp-splitview--vertical",
   paneClassName: "sp-splitview__pane",
+  paneAnimatedClassName: "sp-splitview__pane--animated",
+  paneCollapsingClassName: "sp-splitview__pane--collapsing",
+  paneExpandingClassName: "sp-splitview__pane--expanding",
   gutterClassName: "sp-splitview__gutter",
   gutterAbsoluteClassName: "sp-splitview__gutter--absolute",
   gutterEmbedClassName: "sp-splitview__gutter--embed",
@@ -61,6 +65,7 @@ class SplitPercent extends EventEmitter {
     this.panes = this.normalizePaneOptions([...panes]);
     this.options = { ...defaultOptions, ...defaultClassNames, ...options };
     this.gutterElements = [];
+    this.animationTimer = null;
     this.splitter = this.createSplitter(this.panes, this.options);
 
     if (this.isGutterAbsolute) {
@@ -162,7 +167,8 @@ class SplitPercent extends EventEmitter {
     }
 
     this.gutterElements.push(gutterElement);
-    this.emit("gutter-created", gutterElement, this);
+
+    this.emit("gutter", gutterElement, this);
     return gutterElement;
   }
 
@@ -218,19 +224,26 @@ class SplitPercent extends EventEmitter {
     return this.options.gutterMode === GutterMode.Absolute;
   }
 
-  collapsePaneAt(index) {
+  collapsePaneAt(index, animated = false) {
+    if (animated) {
+      this.preparePaneAnimation("collapsing");
+    }
+
     this.splitter.collapse(index);
+    const paneSizes = this.splitter.getSizes();
 
     if (this.isGutterAbsolute) {
-      this.updateGutters(this.splitter.getSizes());
+      this.updateGutters(paneSizes);
     }
+
+    this.emit("resize", paneSizes, this);
   }
 
-  collapsePane(id) {
+  collapsePane(id, animated = false) {
     const index = this.panes.findIndex(pane => pane.id === id);
 
     if (index !== -1) {
-      this.collapsePaneAt(index);
+      this.collapsePaneAt(index, animated);
     }
   }
 
@@ -271,12 +284,42 @@ class SplitPercent extends EventEmitter {
     }
   }
 
+  preparePaneAnimation(animationName) {
+    clearTimeout(this.animationTimer);
+    this.addAnimationClasses(animationName);
+    this.animationTimer = setTimeout(() => {
+      this.removeAnimationClasses();
+    }, this.options.animationDuration);
+  }
+
+  addAnimationClasses(name) {
+    for (let i = 0; i < this.panes.length; i++) {
+      const paneElement = this.panes[i].element;
+      paneElement.classList.add(this.options.paneAnimatedClassName);
+
+      if (name === "collapsing") {
+        paneElement.classList.add(this.options.paneCollapsingClassName);
+      } else if (name === "expanding") {
+        paneElement.classList.add(this.options.paneExpandingClassName);
+      }
+    }
+  }
+
+  removeAnimationClasses() {
+    for (let i = 0; i < this.panes.length; i++) {
+      const paneElement = this.panes[i].element;
+      paneElement.classList.remove(this.options.paneAnimatedClassName);
+      paneElement.classList.remove(this.options.paneCollapsingClassName);
+      paneElement.classList.remove(this.options.paneExpandingClassName);
+    }
+  }
+
   onDragStart(paneSizes) {
     if (this.isGutterAbsolute) {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("before-resize", paneSizes, this);
+    this.emit("resize", paneSizes, this);
   }
 
   onDragEnd(paneSizes) {
@@ -284,7 +327,7 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("resized", paneSizes, this);
+    this.emit("resize", paneSizes, this);
   }
 
   onDrag(paneSizes) {

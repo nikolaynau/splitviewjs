@@ -56,3 +56,26 @@
   /* cursor */
   cursor: row-resize;
 }
+
+/* animation */
+.sa-splitview__pane--animated {
+  transition-duration: 300ms;
+}
+
+.sa-splitview--horizontal > .sa-splitview__pane--animated {
+  transition-property: height top;
+}
+
+.sa-splitview--vertical > .sa-splitview__pane--animated {
+  transition-property: width left;
+}
+
+.sa-splitview__pane--expanding {
+  /* easeOutQuadratic */
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.sa-splitview__pane--collapsing {
+  /* easeInQuadratic */
+  transition-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}

@@ -15,6 +15,8 @@ const defaultOptions = {
   dragInterval: 1,
   direction: Direction.Vertical,
   cursor: "col-resize",
+  animationDuration: 300,
+  compareThreshold: 0.001,
   createGutter: null,
   elementStyle: null,
   gutterStyle: null
@@ -25,7 +27,8 @@ const defaultPaneOptions = {
   element: null,
   size: 0,
   minSize: 0,
-  disabled: false
+  disabled: false,
+  fallbackExpandSize: null
 }
 
 const defaultClassNames = {
@@ -33,6 +36,9 @@ const defaultClassNames = {
   horizontalClassName: "sa-splitview--horizontal",
   verticalClassName: "sa-splitview--vertical",
   paneClassName: "sa-splitview__pane",
+  paneAnimatedClassName: "sa-splitview__pane--animated",
+  paneCollapsingClassName: "sa-splitview__pane--collapsing",
+  paneExpandingClassName: "sa-splitview__pane--expanding",
   gutterClassName: "sa-splitview__gutter",
   gutterDisabledClassName: "sa-splitview__gutter--disabled",
   customGutterClassName: null
@@ -51,6 +57,8 @@ class SplitAbsolute extends EventEmitter {
     this.setGutterStyle = this.setGutterStyle.bind(this);
 
     this.gutterElements = [];
+    this.animationTimer = null;
+    this.toggleSizes = {};
     this.panes = this.normalizePaneOptions([...panes]);
     this.options = { ...defaultOptions, ...defaultClassNames, ...options };
 
@@ -158,7 +166,8 @@ class SplitAbsolute extends EventEmitter {
     }
 
     this.gutterElements.push(gutterElement);
-    this.emit("gutter-created", gutterElement, this);
+
+    this.emit("gutter", gutterElement, this);
     return gutterElement;
   }
 
@@ -229,6 +238,40 @@ class SplitAbsolute extends EventEmitter {
     return result;
   }
 
+  adjustPaneToSize(index, size) {
+    const pixelSizes = this.convertPercentToPxArray(this.splitter.getSizes());
+    const delta = pixelSizes[index] - size;
+    pixelSizes[index] = size;
+
+    const getPriority = (pane, idx) => {
+      if (index === idx) return -1;
+      if (pane.size === 0) return 1;
+      return 0;
+    }
+
+    const prioritySizes = this.panes.map((pane, index) => ({
+      size: pixelSizes[index],
+      minSize: pane.minSize,
+      priority: getPriority(pane, index),
+      index
+    })).sort((a, b) => {
+      if (a.priority === b.priority) {
+        return b.index - a.index
+      }
+      return b.priority - a.priority;
+    });
+
+    this.distributeSizes(prioritySizes, delta);
+
+    const distributedPixelSizes = prioritySizes
+      .sort((a, b) => a.index - b.index)
+      .map(({ size }) => size);
+
+    const distributedPercentSizes = this.convertPxToPercentArray(distributedPixelSizes);
+    this.correctDistribution(distributedPercentSizes);
+    this.splitter.setSizes(distributedPercentSizes);
+  }
+
   resizePaneSizes(delta) {
     const oldContanerSize = this.containerSize;
     const newContainerSize = oldContanerSize + delta;
@@ -250,13 +293,13 @@ class SplitAbsolute extends EventEmitter {
 
     this.distributeSizes(prioritySizes, delta);
 
-    const newPercentSizes = prioritySizes.sort((a, b) => a.index - b.index)
+    const distributedSizes = prioritySizes.sort((a, b) => a.index - b.index)
       .map(({ size }) => (size * 100) / newContainerSize);
 
-    this.correctDistribution(newPercentSizes);
+    this.correctDistribution(distributedSizes);
 
     this.containerSize = newContainerSize;
-    this.splitter.setSizes(newPercentSizes);
+    this.splitter.setSizes(distributedSizes);
 
     const updatedSizes = this.splitter.getSizes();
     this.updateGutters(updatedSizes);
@@ -298,8 +341,12 @@ class SplitAbsolute extends EventEmitter {
     return (value * 100) / this.containerSize;
   }
 
-  convertPxToPercentArray(values) {
+  convertPercentToPxArray(values) {
     return values.map(value => this.convertPecentToPx(value));
+  }
+
+  convertPxToPercentArray(values) {
+    return values.map(value => this.convertPxToPercent(value));
   }
 
   invalidateSize() {
@@ -309,16 +356,84 @@ class SplitAbsolute extends EventEmitter {
     this.resizePaneSizes(delta);
   }
 
-  collapsePaneAt(index) {
+  collapsePaneAt(index, animated = false) {
+    if (animated) {
+      this.preparePaneAnimation("collapsing");
+    }
+
     this.splitter.collapse(index);
-    this.updateGutters(this.splitter.getSizes());
+
+    const percentSizes = this.splitter.getSizes();
+    this.updateGutters(percentSizes);
+
+    this.emit("resize", percentSizes, this);
   }
 
-  collapsePane(id) {
+  collapsePane(id, animated = false) {
     const index = this.panes.findIndex(pane => pane.id === id);
 
     if (index !== -1) {
-      this.collapsePaneAt(index);
+      this.collapsePaneAt(index, animated);
+    }
+  }
+
+  isCollapsedPaneAt(index) {
+    const minSize = this.panes[index].minSize;
+    const pixelSize = this.convertPecentToPx(this.splitter.getSizes()[index]);
+    return Math.abs(pixelSize - minSize) <= this.options.compareThreshold;
+  }
+
+  isCollapsedPane(id) {
+    const index = this.panes.findIndex(pane => pane.id === id);
+
+    if (index !== -1) {
+      return this.isCollapsedPaneAt(index);
+    }
+
+    return false;
+  }
+
+  expandPaneAt(index, size, animated = false) {
+    if (animated) {
+      this.preparePaneAnimation("expanding");
+    }
+
+    this.adjustPaneToSize(index, size);
+
+    const percentSizes = this.splitter.getSizes();
+    this.updateGutters(percentSizes);
+
+    this.emit("resize", percentSizes, this);
+  }
+
+  expandPane(id, size, animated = false) {
+    const index = this.panes.findIndex(pane => pane.id === id);
+
+    if (index !== -1) {
+      this.expandPane(index, size, animated);
+    }
+  }
+
+  togglePaneAt(index, size = null, animated = false) {
+    if (this.isCollapsedPaneAt(index)) {
+      size = size
+        ?? this.toggleSizes[index]
+        ?? this.panes[index].fallbackExpandSize;
+
+      if (isDefined(size)) {
+        this.expandPaneAt(index, size, animated);
+      }
+    } else {
+      this.toggleSizes[index] = this.convertPecentToPx(this.splitter.getSizes()[index]);
+      this.collapsePaneAt(index, animated)
+    }
+  }
+
+  togglePane(id, size = null, animated = false) {
+    const index = this.panes.findIndex(pane => pane.id === id);
+
+    if (index !== -1) {
+      this.togglePaneAt(index, size, animated);
     }
   }
 
@@ -359,14 +474,44 @@ class SplitAbsolute extends EventEmitter {
     }
   }
 
+  preparePaneAnimation(animationName) {
+    clearTimeout(this.animationTimer);
+    this.addAnimationClasses(animationName);
+    this.animationTimer = setTimeout(() => {
+      this.removeAnimationClasses();
+    }, this.options.animationDuration);
+  }
+
+  addAnimationClasses(name) {
+    for (let i = 0; i < this.panes.length; i++) {
+      const paneElement = this.panes[i].element;
+      paneElement.classList.add(this.options.paneAnimatedClassName);
+
+      if (name === "collapsing") {
+        paneElement.classList.add(this.options.paneCollapsingClassName);
+      } else if (name === "expanding") {
+        paneElement.classList.add(this.options.paneExpandingClassName);
+      }
+    }
+  }
+
+  removeAnimationClasses() {
+    for (let i = 0; i < this.panes.length; i++) {
+      const paneElement = this.panes[i].element;
+      paneElement.classList.remove(this.options.paneAnimatedClassName);
+      paneElement.classList.remove(this.options.paneCollapsingClassName);
+      paneElement.classList.remove(this.options.paneExpandingClassName);
+    }
+  }
+
   onDragStart(paneSizes) {
     this.updateGutters(paneSizes);
-    this.emit("before-resize", paneSizes, this);
+    this.emit("resize", paneSizes, this);
   }
 
   onDragEnd(paneSizes) {
     this.updateGutters(paneSizes);
-    this.emit("resized", paneSizes, this);
+    this.emit("resize", paneSizes, this);
   }
 
   onDrag(paneSizes) {

@@ -61,3 +61,19 @@
   /* cursor */
   cursor: row-resize;
 }
+
+/* animation */
+.sp-splitview__pane--animated {
+  transition-duration: 300ms;
+  transition-property: flex-basis;
+}
+
+.sp-splitview__pane--expanding {
+  /* easeOutQuadratic */
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.sp-splitview__pane--collapsing {
+  /* easeInQuadratic */
+  transition-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}

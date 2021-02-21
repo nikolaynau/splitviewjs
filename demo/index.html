@@ -66,6 +66,7 @@
 
   <div class="buttons">
     <button id="collapse">Collapse pane</button>
+    <button id="collapse-animated">Collapse (animated)</button>
     <button id="disable">Disable pane</button>
     <button id="destroy">Destroy</button>
   </div>
@@ -140,6 +141,17 @@
       <div class="paneB" id="pane26"></div>
       <div class="paneC" id="pane27"></div>
     </div>
+  </div>
+
+  <div class="buttons">
+    <button id="collapse-animated2">Collapse left (animated)</button>
+    <button id="expand-animated2">Expand left (animated)</button>
+    <button id="is-collapsed">Is collapsed</button>
+    <button id="collapse-animated3">Collapse right (animated)</button>
+    <button id="expand-animated3">Expand right (animated)</button>
+    <br/>
+    <button id="toggle-animated1">Toggle left (animated)</button>
+    <button id="toggle-animated2">Toggle right (animated)</button>
   </div>
 
   <script>
@@ -231,6 +243,10 @@
       sv1.collapsePaneAt(0);
     });
 
+    document.getElementById("collapse-animated").addEventListener("click", function () {
+      sv1.collapsePaneAt(0, true);
+    });
+
     document.getElementById("disable").addEventListener("click", function () {
       sv1.disablePaneAt(0, true);
     });
@@ -286,6 +302,35 @@
     window.addEventListener("resize", () => {
       sv2.invalidateSize();
       sv3.invalidateSize();
+    });
+
+    // Buttons
+    document.getElementById("collapse-animated2").addEventListener("click", function () {
+      sv2.collapsePaneAt(0, true);
+    });
+
+    document.getElementById("expand-animated2").addEventListener("click", function () {
+      sv2.expandPaneAt(0, 300, true);
+    });
+
+    document.getElementById("is-collapsed").addEventListener("click", function () {
+      alert("Pane is collapsed: " + (sv2.isCollapsedPaneAt(0) ? "true" : "false"))
+    });
+
+    document.getElementById("collapse-animated3").addEventListener("click", function () {
+      sv2.collapsePaneAt(2, true);
+    });
+
+    document.getElementById("expand-animated3").addEventListener("click", function () {
+      sv2.expandPaneAt(2, 300, true);
+    });
+
+    document.getElementById("toggle-animated1").addEventListener("click", function () {
+      sv2.togglePaneAt(0, null, true);
+    });
+
+    document.getElementById("toggle-animated2").addEventListener("click", function () {
+      sv2.togglePaneAt(2, null, true);
     });
   </script>
 </body>
