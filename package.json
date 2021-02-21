@@ -1,6 +1,6 @@
 {
   "name": "splitview",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "SplitView implementation based on Split.js",
   "main": "dist/splitview.js",
   "module": "dist/splitview.es.js",
