@@ -41,6 +41,7 @@ const defaultClassNames = {
   paneClassName: "sp-splitview__pane",
   gutterClassName: "sp-splitview__gutter",
   gutterAbsoluteClassName: "sp-splitview__gutter--absolute",
+  gutterEmbedClassName: "sp-splitview__gutter--embed",
   gutterDisabledClassName: "sp-splitview__gutter--disabled",
   customGutterClassName: null
 }
@@ -150,15 +151,17 @@ class SplitPercent extends EventEmitter {
 
     gutterElement.classList.add(this.options.gutterClassName);
 
+    if (this.isGutterAbsolute) {
+      gutterElement.classList.add(this.options.gutterAbsoluteClassName);
+    } else {
+      gutterElement.classList.add(this.options.gutterEmbedClassName);
+    }
+
     if (this.options.customGutterClassName) {
       gutterElement.classList.add(this.options.customGutterClassName);
     }
 
-    if (this.isGutterAbsolute) {
-      gutterElement.classList.add(this.options.gutterAbsoluteClassName);
-      this.gutterElements.push(gutterElement);
-    }
-
+    this.gutterElements.push(gutterElement);
     this.emit("gutter-created", gutterElement, this);
     return gutterElement;
   }

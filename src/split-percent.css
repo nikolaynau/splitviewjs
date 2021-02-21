@@ -31,6 +31,10 @@
   height: 100%;
 }
 
+.sp-splitview__gutter--embed {
+  flex-shrink: 0;
+}
+
 .sp-splitview__gutter--absolute {
   /* display styles */
   position: absolute;
