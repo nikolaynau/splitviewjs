@@ -21,10 +21,10 @@ const defaultOptions = {
   dragInterval: 1,
   direction: Direction.Vertical,
   cursor: "col-resize",
-  animationDuration: 300,
   createGutter: null,
   elementStyle: null,
-  gutterStyle: null
+  gutterStyle: null,
+  animationDuration: 300
 }
 
 const defaultPaneOptions = {
