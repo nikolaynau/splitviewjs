@@ -8,22 +8,21 @@ There are two implementations:
 
 **split-percent**
 
-- flexbox layout
-- size property: ***flex-basis***
-- percent unit
+- layout: **flexbox**
+- property: ***flex-basis***
+- unit: **percent**
 - embed and absolute gutters
-- collapse animation
-- disable resize pane
+- collapse with animation
+- disable pane
 
 **split-absolute**
 
-- absolute position layout
-- size property: ***left, top, width, height***
-- pixel unit
+- layout: **absolute position**
+- property: ***left, top, width, height***
+- unit: **pixel**
 - absolute gutters
-- expand, toggle
-- collapse and expand animation
-- disable resize pane
+- collapse, expand, toggle with animation
+- disable pane
 - smart size distribution
 
 ## Installation
