@@ -521,8 +521,13 @@ class SplitAbsolute extends EventEmitter {
 
   destroy() {
     this.removeAllListeners();
+
+    clearTimeout(this.animationTimer);
+    this.removeAnimationClasses();
+
     this.splitter?.destroy();
     this.splitter = null;
+
     this.panes = null;
     this.options = null;
     this.container = null;
