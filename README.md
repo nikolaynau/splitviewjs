@@ -192,7 +192,7 @@ Directly instantiate `SplitAbsolute`:
   const instance = new SplitView.SplitAbsolute(panes, options);
 ```
 
-**SplitPercent:**
+SplitPercent:
 
 #### `.collapsePaneAt(index, animated? = false)`
 #### `.collapsePane(id, animated? = false)`
@@ -200,7 +200,7 @@ Directly instantiate `SplitAbsolute`:
 #### `.disablePane(id)`
 #### `.destroy()`
 
-**SplitAbsolute:**
+SplitAbsolute:
 
 #### `.invalidateSize()`
 #### `.collapsePaneAt(index, animated? = false)`
