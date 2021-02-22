@@ -2,8 +2,6 @@
 
 > SplitView implementation based on [Split.js](https://github.com/nathancahill/split)
 
-
-
 There are two implementations:
 
 **split-percent**
@@ -67,14 +65,14 @@ Default HTML:
 
 | Name                  | Type            | Default        | Description                                                                                                                                   |
 | --------------------- | --------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`                  | Number, String  | `null`         | Unique pane id, maybe used in api methods. (optional)                                                                                         |
+| `id`                  | Number, String  | `null`         | Unique pane id. Used in api methods. (optional)                                                                                         |
 | `element`             | HTMLElement     | `null`         | Pane element. (**required**)                                                                                                                      |
 | `size`                | Number, String  | `0`            | Initial size of pane element in percents. In ***split-absolute*** availabe `'px'` and `'%'`, `0` value take up the remaining size. (optional) |
 | `minSize`             | Number          | `0`            | Minimum size of pane element in pixels. (optional)                                                                                            |
 | `disabled`            | Boolean         | `false`        | Disable resize of pane element. (optional)                                                                                                    |
 | `fallbackExpandSize`  | Number          | `null`         | Fallback expand size in pixels. Only in ***split-absolute***. (optional)                                                                      |
 
-### Common options:
+### Options:
 
 | Name                    | Type         | Default        | Description                                                                                                                      |
 | ----------------------- | ------------ | -------------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -122,6 +120,10 @@ const panes = [
   }
 ];
 const splitview = SplitView(panes);
+
+splitview.on("resize", (percentSizes, sender) => {
+  console.log(percentSizes, sender);
+});
 ```
 
 Create absolute slitview:
