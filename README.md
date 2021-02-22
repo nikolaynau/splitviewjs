@@ -1,4 +1,4 @@
-# splitview.js
+# splitview.js [![npm version](https://badge.fury.io/js/splitview.js.svg)](https://badge.fury.io/js/splitview.js)
 
 > SplitView implementation based on [Split.js](https://github.com/nathancahill/split)
 
