@@ -194,26 +194,26 @@ Directly instantiate `SplitAbsolute`:
 
 **SplitPercent:**
 
-### `.collapsePaneAt(index, animated? = false)`
-### `.collapsePane(id, animated? = false)`
-### `.disablePaneAt(index)`
-### `.disablePane(id)`
-### `.destroy()`
+#### `.collapsePaneAt(index, animated? = false)`
+#### `.collapsePane(id, animated? = false)`
+#### `.disablePaneAt(index)`
+#### `.disablePane(id)`
+#### `.destroy()`
 
 **SplitAbsolute:**
 
-### `.invalidateSize()`
-### `.collapsePaneAt(index, animated? = false)`
-### `.collapsePane(id, animated? = false)`
-### `.expandPaneAt(index, size, animated? = false)`
-### `.expandPane(id, size, animated? = false)`
-### `.togglePaneAt(index, size? = null, animated? = false)`
-### `.togglePane(id, size? = null, animated? = false)`
-### `.isCollapsedPaneAt(index)`
-### `.isCollapsedPane(id)`
-### `.disablePaneAt(index)`
-### `.disablePane(id)`
-### `.destroy()`
+#### `.invalidateSize()`
+#### `.collapsePaneAt(index, animated? = false)`
+#### `.collapsePane(id, animated? = false)`
+#### `.expandPaneAt(index, size, animated? = false)`
+#### `.expandPane(id, size, animated? = false)`
+#### `.togglePaneAt(index, size? = null, animated? = false)`
+#### `.togglePane(id, size? = null, animated? = false)`
+#### `.isCollapsedPaneAt(index)`
+#### `.isCollapsedPane(id)`
+#### `.disablePaneAt(index)`
+#### `.disablePane(id)`
+#### `.destroy()`
 
 ## License
 
