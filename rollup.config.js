@@ -10,7 +10,6 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const output = {
   globals: {
     "split.js": "Split",
-    "eventemitter3": "EventEmitter"
   },
   format: "umd",
   file: "dist/splitview.js",
@@ -20,8 +19,7 @@ const output = {
 }
 
 const external = [
-  "split.js",
-  "eventemitter3"
+  "split.js"
 ]
 
 export default [

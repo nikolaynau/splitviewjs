@@ -1,5 +1,4 @@
 import Split from "split.js"
-import EventEmitter from "eventemitter3"
 import { clamp, findIndexes, percentToNumber, pxToPercent, sum, isDefined } from "./utils"
 
 const Direction = Object.freeze({
@@ -19,7 +18,11 @@ const defaultOptions = {
   elementStyle: null,
   gutterStyle: null,
   animationDuration: 300,
-  compareThreshold: 0.001
+  compareThreshold: 0.001,
+  onDragStart: null,
+  onDrag: null,
+  onDragEnd: null,
+  onResize: null
 }
 
 const defaultPaneOptions = {
@@ -44,10 +47,8 @@ const defaultClassNames = {
   customGutterClassName: null
 }
 
-class SplitAbsolute extends EventEmitter {
+class SplitAbsolute {
   constructor(panes, options) {
-    super()
-
     this.onDrag = this.onDrag.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
@@ -166,8 +167,6 @@ class SplitAbsolute extends EventEmitter {
     }
 
     this.gutterElements.push(gutterElement);
-
-    this.emit("gutter", gutterElement, this);
     return gutterElement;
   }
 
@@ -304,7 +303,7 @@ class SplitAbsolute extends EventEmitter {
     const updatedSizes = this.splitter.getSizes();
     this.updateGutters(updatedSizes);
 
-    this.emit("resize", updatedSizes, this);
+    this.options.onResize?.(this.createEvent({ percentSizes: updatedSizes }));
   }
 
   distributeSizes(data, delta) {
@@ -366,7 +365,7 @@ class SplitAbsolute extends EventEmitter {
     const percentSizes = this.splitter.getSizes();
     this.updateGutters(percentSizes);
 
-    this.emit("resize", percentSizes, this);
+    this.options.onResize?.(this.createEvent({ percentSizes }));
   }
 
   collapsePane(id, animated = false) {
@@ -403,7 +402,7 @@ class SplitAbsolute extends EventEmitter {
     const percentSizes = this.splitter.getSizes();
     this.updateGutters(percentSizes);
 
-    this.emit("resize", percentSizes, this);
+    this.options.onResize?.(this.createEvent({ percentSizes }));
   }
 
   expandPane(id, size, animated = false) {
@@ -506,17 +505,27 @@ class SplitAbsolute extends EventEmitter {
 
   onDragStart(paneSizes) {
     this.updateGutters(paneSizes);
-    this.emit("resize", paneSizes, this);
+
+    this.options.onDragStart?.(this.createEvent({ percentSizes: paneSizes }));
+    this.options.onResize?.(this.createEvent({ percentSizes: paneSizes }));
   }
 
   onDragEnd(paneSizes) {
     this.updateGutters(paneSizes);
-    this.emit("resize", paneSizes, this);
+
+    this.options.onDragEnd?.(this.createEvent({ percentSizes: paneSizes }));
+    this.options.onResize?.(this.createEvent({ percentSizes: paneSizes }));
   }
 
   onDrag(paneSizes) {
     this.updateGutters(paneSizes);
-    this.emit("resize", paneSizes, this);
+
+    this.options.onDrag?.(this.createEvent({ percentSizes: paneSizes }));
+    this.options.onResize?.(this.createEvent({ percentSizes: paneSizes }));
+  }
+
+  createEvent(args) {
+    return { sender: this, ...args };
   }
 
   destroy() {

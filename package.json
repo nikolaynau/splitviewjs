@@ -18,7 +18,6 @@
     "del": "rimraf ./dist"
   },
   "dependencies": {
-    "eventemitter3": "^4.0.7",
     "split.js": "^1.6.2"
   },
   "devDependencies": {

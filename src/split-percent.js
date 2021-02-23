@@ -1,5 +1,4 @@
 import Split from "split.js"
-import EventEmitter from "eventemitter3"
 import { isDefined } from "./utils"
 
 const GutterMode = Object.freeze({
@@ -19,12 +18,16 @@ const defaultOptions = {
   gutterMode: GutterMode.Embed,
   snapOffset: 0,
   dragInterval: 1,
+  animationDuration: 300,
   direction: Direction.Vertical,
   cursor: "col-resize",
   createGutter: null,
   elementStyle: null,
   gutterStyle: null,
-  animationDuration: 300
+  onDragStart: null,
+  onDrag: null,
+  onDragEnd: null,
+  onResize: null
 }
 
 const defaultPaneOptions = {
@@ -50,10 +53,8 @@ const defaultClassNames = {
   customGutterClassName: null
 }
 
-class SplitPercent extends EventEmitter {
+class SplitPercent {
   constructor(panes, options) {
-    super()
-
     this.onDrag = this.onDrag.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
@@ -167,8 +168,6 @@ class SplitPercent extends EventEmitter {
     }
 
     this.gutterElements.push(gutterElement);
-
-    this.emit("gutter", gutterElement, this);
     return gutterElement;
   }
 
@@ -236,7 +235,7 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("resize", paneSizes, this);
+    this.options.onResize?.(this.createEvent({ percentSizes: paneSizes }));
   }
 
   collapsePane(id, animated = false) {
@@ -319,7 +318,8 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("resize", paneSizes, this);
+    this.options.onDragStart?.(this.createEvent({ percentSizes: paneSizes }));
+    this.options.onResize?.(this.createEvent({ percentSizes: paneSizes }));
   }
 
   onDragEnd(paneSizes) {
@@ -327,7 +327,8 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("resize", paneSizes, this);
+    this.options.onDragEnd?.(this.createEvent({ percentSizes: paneSizes }));
+    this.options.onResize?.(this.createEvent({ percentSizes: paneSizes }));
   }
 
   onDrag(paneSizes) {
@@ -335,7 +336,12 @@ class SplitPercent extends EventEmitter {
       this.updateGutters(paneSizes);
     }
 
-    this.emit("resize", paneSizes, this);
+    this.options.onDrag?.(this.createEvent({ percentSizes: paneSizes }));
+    this.options.onResize?.(this.createEvent({ percentSizes: paneSizes }));
+  }
+
+  createEvent(args) {
+    return { sender: this, ...args };
   }
 
   destroy() {

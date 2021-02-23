@@ -8,7 +8,6 @@
   <title>SplitView</title>
   <link rel="stylesheet" href="splitview.css">
   <script src="https://unpkg.com/split.js@1.6.2/dist/split.js"></script>
-  <script src="https://unpkg.com/eventemitter3@4.0.7/index.js"></script>
   <script src="splitview.js"></script>
   <style>
     html,
@@ -149,7 +148,7 @@
     <button id="is-collapsed">Is collapsed</button>
     <button id="collapse-animated3">Collapse right (animated)</button>
     <button id="expand-animated3">Expand right (animated)</button>
-    <br/>
+    <br />
     <button id="toggle-animated1">Toggle left (animated)</button>
     <button id="toggle-animated2">Toggle right (animated)</button>
   </div>
@@ -282,6 +281,7 @@
         element: document.getElementById("pane25"),
         size: "300px",
         minSize: 50,
+        fallbackExpandSize: 300
       },
       {
         element: document.getElementById("pane26"),
