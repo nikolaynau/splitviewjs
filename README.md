@@ -2,7 +2,7 @@
 
 > SplitView implementation based on [Split.js](https://github.com/nathancahill/split)
 
-[Live Demo](https://unpkg.com/splitview.js@1.0.1/dist/index.html)
+[Live Demo](https://unpkg.com/splitview.js@1.0.2/dist/index.html)
 
 There are two implementations:
 
@@ -91,13 +91,10 @@ Default HTML:
 | `elementStyle`          | Function     | `null`         | Set the custom style of each element. (optional)                                                                                 |
 | `gutterStyle`           | Function     | `null`         | Set the custom style of the gutter. (optional)                                                                                   |
 | `customGutterClassName` | String       | `null`         | Additional gutter class name. (optional)                                                                                         |
-
-### Events:
-
-| Event name                     | Type         | Description         |
-| -------------- | ------------- | ---------------------------------- |
-| `resize`       | Array         | Emit every time the size changes.  |
-| `gutter`       | HTMLElement   | Emit when created gutter element.  |
+| `onDrag`                | Function     | `null`         | Callback on drag. (optional)                                                                                                     |
+| `onDragStart`           | Function     | `null`         | Callback on drag start. (optional)                                                                                               |
+| `onDragEnd`             | Function     | `null`         | Callback on drag end. (optional)                                                                                                 |
+| `onResize`              | Function     | `null`         | Callback on resize panes. (optional)                                                                                             |
 
 ## Examples
 
@@ -121,11 +118,12 @@ const panes = [
     minSize: 0 //px
   }
 ];
-const splitview = SplitView(panes);
 
-splitview.on("resize", (percentSizes, sender) => {
-  console.log(percentSizes, sender);
-});
+const options = {
+  onResize: ({percentSizes, sender}) => console.log(percentSizes, sender);
+};
+
+const splitview = SplitView(panes, options);
 ```
 
 Create absolute slitview:
@@ -148,16 +146,16 @@ const panes = [
     minSize: 0 //px
   }
 ];
-const splitview = SplitView(panes, {
+
+const options = {
   percent: false,
-  snapOffset: 30
-});
+  snapOffset: 30,
+  onResize: ({percentSizes, sender}) => console.log(percentSizes, sender);
+};
 
-splitview.on("resize", (percentSizes, sender) => {
-  console.log(percentSizes, sender);
-});
+const splitview = SplitView(panes, options);
 
-// Distribute size on window resize
+// Distribute sizes on window resize
 window.addEventListener("resize", () => {
   splitview.invalidateSize();
 });
