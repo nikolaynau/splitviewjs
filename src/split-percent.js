@@ -345,8 +345,6 @@ class SplitPercent {
   }
 
   destroy() {
-    this.removeAllListeners();
-
     clearTimeout(this.animationTimer);
     this.removeAnimationClasses();
 
