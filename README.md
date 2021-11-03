@@ -2,7 +2,7 @@
 
 > SplitView implementation based on [Split.js](https://github.com/nathancahill/split)
 
-[Live Demo](https://unpkg.com/splitview.js@1.0.4/dist/index.html)
+[Live Demo](https://unpkg.com/splitview.js/dist/index.html)
 
 There are two implementations:
 
