@@ -8,14 +8,14 @@ export function toNumber(value, defaults = null) {
 }
 
 export function percentToNumber(str) {
-  if (typeof str === "string" && str.indexOf("%") !== -1) {
+  if (typeof str === 'string' && str.indexOf('%') !== -1) {
     return toNumber(str, 0);
   }
   return str;
 }
 
 export function pxToPercent(str, size) {
-  if (typeof str === "string" && str.indexOf("px") !== -1) {
+  if (typeof str === 'string' && str.indexOf('px') !== -1) {
     return (toNumber(str) * 100) / size;
   }
   return str;
@@ -30,7 +30,7 @@ export function findIndexes(array, predicate) {
   if (!Array.isArray(array)) return [];
   return array.reduce((res, item, index) => {
     if (predicate(item)) {
-      res.push(index)
+      res.push(index);
     }
     return res;
   }, []);

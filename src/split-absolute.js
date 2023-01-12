@@ -1,19 +1,26 @@
-import Split from "split.js"
-import { clamp, findIndexes, percentToNumber, pxToPercent, sum, isDefined } from "./utils"
+import Split from 'split.js';
+import {
+  clamp,
+  findIndexes,
+  percentToNumber,
+  pxToPercent,
+  sum,
+  isDefined
+} from './utils';
 
 const Direction = Object.freeze({
-  Horizontal: "horizontal",
-  Vertical: "vertical"
-})
+  Horizontal: 'horizontal',
+  Vertical: 'vertical'
+});
 
 const defaultOptions = {
   expandToMin: false,
   gutterSize: 4,
-  gutterAlign: "center",
+  gutterAlign: 'center',
   snapOffset: 0,
   dragInterval: 1,
   direction: Direction.Vertical,
-  cursor: "col-resize",
+  cursor: 'col-resize',
   createGutter: null,
   elementStyle: null,
   gutterStyle: null,
@@ -23,7 +30,7 @@ const defaultOptions = {
   onDrag: null,
   onDragEnd: null,
   onResize: null
-}
+};
 
 const defaultPaneOptions = {
   id: null,
@@ -32,20 +39,20 @@ const defaultPaneOptions = {
   minSize: 0,
   disabled: false,
   fallbackExpandSize: null
-}
+};
 
 const defaultClassNames = {
-  containerClassName: "sa-splitview",
-  horizontalClassName: "sa-splitview--horizontal",
-  verticalClassName: "sa-splitview--vertical",
-  paneClassName: "sa-splitview__pane",
-  paneAnimatedClassName: "sa-splitview__pane--animated",
-  paneCollapsingClassName: "sa-splitview__pane--collapsing",
-  paneExpandingClassName: "sa-splitview__pane--expanding",
-  gutterClassName: "sa-splitview__gutter",
-  gutterDisabledClassName: "sa-splitview__gutter--disabled",
+  containerClassName: 'sa-splitview',
+  horizontalClassName: 'sa-splitview--horizontal',
+  verticalClassName: 'sa-splitview--vertical',
+  paneClassName: 'sa-splitview__pane',
+  paneAnimatedClassName: 'sa-splitview__pane--animated',
+  paneCollapsingClassName: 'sa-splitview__pane--collapsing',
+  paneExpandingClassName: 'sa-splitview__pane--expanding',
+  gutterClassName: 'sa-splitview__gutter',
+  gutterDisabledClassName: 'sa-splitview__gutter--disabled',
   customGutterClassName: null
-}
+};
 
 class SplitAbsolute {
   constructor(panes, options) {
@@ -72,8 +79,15 @@ class SplitAbsolute {
       this.container.classList.add(this.options.horizontalClassName);
     }
 
-    this.containerSize = this.getContainerSize(this.container, this.options.direction);
-    this.splitter = this.createSplitter(this.panes, this.options, this.containerSize);
+    this.containerSize = this.getContainerSize(
+      this.container,
+      this.options.direction
+    );
+    this.splitter = this.createSplitter(
+      this.panes,
+      this.options,
+      this.containerSize
+    );
 
     const percentSizes = this.splitter.getSizes();
     this.updateGutters(percentSizes);
@@ -87,25 +101,26 @@ class SplitAbsolute {
         return {
           ...defaultPaneOptions,
           element: pane
-        }
+        };
       } else {
         return {
           ...defaultPaneOptions,
           ...pane
-        }
+        };
       }
-    })
+    });
   }
 
   normalizePaneSizes(sizes, containerSize) {
-    let resultSizes = sizes.map(size => percentToNumber(size))
+    let resultSizes = sizes
+      .map(size => percentToNumber(size))
       .map(size => pxToPercent(size, containerSize));
     const zeroSizeIndexes = findIndexes(resultSizes, size => size === 0);
 
     if (zeroSizeIndexes.length > 0) {
       const leftSize = clamp(0, 100 - sum(resultSizes), 100);
       const distrSize = leftSize / zeroSizeIndexes.length;
-      zeroSizeIndexes.forEach(index => resultSizes[index] = distrSize);
+      zeroSizeIndexes.forEach(index => (resultSizes[index] = distrSize));
     }
 
     return resultSizes;
@@ -125,9 +140,9 @@ class SplitAbsolute {
     splitOptions.gutterAlign = options.gutterAlign;
 
     if (options.direction === Direction.Vertical) {
-      splitOptions.direction = "horizontal";
+      splitOptions.direction = 'horizontal';
     } else {
-      splitOptions.direction = "vertical";
+      splitOptions.direction = 'vertical';
     }
 
     splitOptions.gutterSize = 0;
@@ -158,7 +173,7 @@ class SplitAbsolute {
     let gutterElement = this.options.createGutter?.();
 
     if (!gutterElement) {
-      gutterElement = document.createElement("div");
+      gutterElement = document.createElement('div');
     }
 
     gutterElement.classList.add(this.options.gutterClassName);
@@ -171,14 +186,21 @@ class SplitAbsolute {
   }
 
   setElementStyle(dimension, size, gutterSize, index) {
-    const customProps = this.options.elementStyle?.(dimension, size, gutterSize, index);
-    const position = this.convertPecentToPx(this.computePanePositionPercent(index));
+    const customProps = this.options.elementStyle?.(
+      dimension,
+      size,
+      gutterSize,
+      index
+    );
+    const position = this.convertPecentToPx(
+      this.computePanePositionPercent(index)
+    );
 
     return {
       [dimension]: `${this.convertPecentToPx(size)}px`,
-      [dimension === "width" ? "left" : "top"]: `${position}px`,
+      [dimension === 'width' ? 'left' : 'top']: `${position}px`,
       ...customProps
-    }
+    };
   }
 
   setGutterStyle(dimension, gutterSize) {
@@ -186,13 +208,13 @@ class SplitAbsolute {
 
     return {
       [dimension]: `${this.options.gutterSize}px`,
-      [dimension === "width" ? "left" : "top"]: "0",
+      [dimension === 'width' ? 'left' : 'top']: '0',
       ...customProps
-    }
+    };
   }
 
   updateGutters(paneSizes) {
-    const prop = this.options.direction === Direction.Vertical ? "left" : "top";
+    const prop = this.options.direction === Direction.Vertical ? 'left' : 'top';
     const halfGutSize = this.options.gutterSize / 2;
     let accumulatedSize = 0;
 
@@ -201,13 +223,15 @@ class SplitAbsolute {
 
       if (isDefined(paneSizes[i])) {
         accumulatedSize += paneSizes[i];
-        gutterElement.style[prop] = `${this.convertPecentToPx(accumulatedSize) - halfGutSize}px`;
+        gutterElement.style[prop] = `${
+          this.convertPecentToPx(accumulatedSize) - halfGutSize
+        }px`;
       }
     }
   }
 
   updatePanePositions(paneSizes) {
-    const prop = this.options.direction === Direction.Vertical ? "left" : "top";
+    const prop = this.options.direction === Direction.Vertical ? 'left' : 'top';
     let accumulatedSize = 0;
 
     for (let i = 0; i < this.panes.length; i++) {
@@ -246,19 +270,21 @@ class SplitAbsolute {
       if (index === idx) return -1;
       if (pane.size === 0) return 1;
       return 0;
-    }
+    };
 
-    const prioritySizes = this.panes.map((pane, index) => ({
-      size: pixelSizes[index],
-      minSize: pane.minSize,
-      priority: getPriority(pane, index),
-      index
-    })).sort((a, b) => {
-      if (a.priority === b.priority) {
-        return b.index - a.index
-      }
-      return b.priority - a.priority;
-    });
+    const prioritySizes = this.panes
+      .map((pane, index) => ({
+        size: pixelSizes[index],
+        minSize: pane.minSize,
+        priority: getPriority(pane, index),
+        index
+      }))
+      .sort((a, b) => {
+        if (a.priority === b.priority) {
+          return b.index - a.index;
+        }
+        return b.priority - a.priority;
+      });
 
     this.distributeSizes(prioritySizes, delta);
 
@@ -266,7 +292,9 @@ class SplitAbsolute {
       .sort((a, b) => a.index - b.index)
       .map(({ size }) => size);
 
-    const distributedPercentSizes = this.convertPxToPercentArray(distributedPixelSizes);
+    const distributedPercentSizes = this.convertPxToPercentArray(
+      distributedPixelSizes
+    );
     this.correctDistribution(distributedPercentSizes);
     this.splitter.setSizes(distributedPercentSizes);
   }
@@ -275,24 +303,28 @@ class SplitAbsolute {
     const oldContanerSize = this.containerSize;
     const newContainerSize = oldContanerSize + delta;
 
-    const pixelSizes = this.splitter.getSizes()
-      .map((percent) => (oldContanerSize * percent) / 100);
+    const pixelSizes = this.splitter
+      .getSizes()
+      .map(percent => (oldContanerSize * percent) / 100);
 
-    const prioritySizes = this.panes.map((pane, index) => ({
-      size: pixelSizes[index],
-      minSize: pane.minSize,
-      priority: pane.size === 0 ? 1 : 0,
-      index
-    })).sort((a, b) => {
-      if (a.priority === b.priority) {
-        return b.index - a.index
-      }
-      return b.priority - a.priority;
-    });
+    const prioritySizes = this.panes
+      .map((pane, index) => ({
+        size: pixelSizes[index],
+        minSize: pane.minSize,
+        priority: pane.size === 0 ? 1 : 0,
+        index
+      }))
+      .sort((a, b) => {
+        if (a.priority === b.priority) {
+          return b.index - a.index;
+        }
+        return b.priority - a.priority;
+      });
 
     this.distributeSizes(prioritySizes, delta);
 
-    const distributedSizes = prioritySizes.sort((a, b) => a.index - b.index)
+    const distributedSizes = prioritySizes
+      .sort((a, b) => a.index - b.index)
       .map(({ size }) => (size * 100) / newContainerSize);
 
     this.correctDistribution(distributedSizes);
@@ -318,7 +350,11 @@ class SplitAbsolute {
       const tail = available - delta;
 
       if (tail < 0) {
-        first.size = clamp(first.minSize, first.size - (delta - Math.abs(tail)), first.size);
+        first.size = clamp(
+          first.minSize,
+          first.size - (delta - Math.abs(tail)),
+          first.size
+        );
         this.distributeSizes(data.slice(1), tail);
       } else {
         first.size = clamp(first.minSize, first.size - delta, first.size);
@@ -350,14 +386,17 @@ class SplitAbsolute {
 
   invalidateSize() {
     const oldSize = this.containerSize;
-    const newSize = this.getContainerSize(this.container, this.options.direction);
+    const newSize = this.getContainerSize(
+      this.container,
+      this.options.direction
+    );
     const delta = newSize - oldSize;
     this.resizePaneSizes(delta);
   }
 
   collapsePaneAt(index, animated = false) {
     if (animated) {
-      this.preparePaneAnimation("collapsing");
+      this.preparePaneAnimation('collapsing');
     }
 
     this.splitter.collapse(index);
@@ -394,7 +433,7 @@ class SplitAbsolute {
 
   expandPaneAt(index, size, animated = false) {
     if (animated) {
-      this.preparePaneAnimation("expanding");
+      this.preparePaneAnimation('expanding');
     }
 
     this.adjustPaneToSize(index, size);
@@ -415,16 +454,17 @@ class SplitAbsolute {
 
   togglePaneAt(index, size = null, animated = false) {
     if (this.isCollapsedPaneAt(index)) {
-      size = size
-        ?? this.toggleSizes[index]
-        ?? this.panes[index].fallbackExpandSize;
+      size =
+        size ?? this.toggleSizes[index] ?? this.panes[index].fallbackExpandSize;
 
       if (isDefined(size)) {
         this.expandPaneAt(index, size, animated);
       }
     } else {
-      this.toggleSizes[index] = this.convertPecentToPx(this.splitter.getSizes()[index]);
-      this.collapsePaneAt(index, animated)
+      this.toggleSizes[index] = this.convertPecentToPx(
+        this.splitter.getSizes()[index]
+      );
+      this.collapsePaneAt(index, animated);
     }
   }
 
@@ -456,7 +496,8 @@ class SplitAbsolute {
 
     for (let i = 0; i < pairs.length; i++) {
       const pair = pairs[i];
-      const disabled = this.panes[pair.a]?.disabled || this.panes[pair.b]?.disabled;
+      const disabled =
+        this.panes[pair.a]?.disabled || this.panes[pair.b]?.disabled;
       this.disableGutter(pair.gutter, disabled);
     }
   }
@@ -468,7 +509,7 @@ class SplitAbsolute {
       if (value) {
         classList.add(this.options.gutterDisabledClassName);
       } else {
-        classList.remove(this.options.gutterDisabledClassName)
+        classList.remove(this.options.gutterDisabledClassName);
       }
     }
   }
@@ -486,9 +527,9 @@ class SplitAbsolute {
       const paneElement = this.panes[i].element;
       paneElement.classList.add(this.options.paneAnimatedClassName);
 
-      if (name === "collapsing") {
+      if (name === 'collapsing') {
         paneElement.classList.add(this.options.paneCollapsingClassName);
-      } else if (name === "expanding") {
+      } else if (name === 'expanding') {
         paneElement.classList.add(this.options.paneExpandingClassName);
       }
     }

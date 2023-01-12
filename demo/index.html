@@ -1,338 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SplitView</title>
-  <link rel="stylesheet" href="splitview.css">
-  <script src="https://unpkg.com/split.js@1.6.5/dist/split.js"></script>
-  <script src="splitview.js"></script>
-  <style>
-    html,
-    body {
-      padding: 0;
-      margin: 0;
-    }
-
-    body {
-      padding: 1rem;
-    }
-
-    .demo-container {
-      height: 250px;
-      width: 100%;
-      margin-bottom: 30px;
-    }
-
-    .buttons {
-      margin-bottom: 30px;
-    }
-
-    .paneA {
-      background-color: #E7F2F8;
-    }
-
-    .paneB {
-      background-color: #74BDCB;
-    }
-
-    .paneC {
-      background-color: #EFE7BC;
-    }
-
-    .my-gutter {
-      background-color: #FFA384;
-    }
-
-    .my-gutter2 {
-      background-color: #FFA384;
-      opacity: 0.1;
-    }
-  </style>
-</head>
-
-<body>
-  <h3>Default SplitView (percent, vertical)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane1"></div>
-      <div class="paneB" id="pane2"></div>
-      <div class="paneC" id="pane3"></div>
-    </div>
-  </div>
-
-  <div class="buttons">
-    <button id="collapse">Collapse pane</button>
-    <button id="collapse-animated">Collapse (animated)</button>
-    <button id="disable">Disable pane</button>
-    <button id="destroy">Destroy</button>
-  </div>
-
-  <h3>Default SplitView (percent, horizontal)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane4"></div>
-      <div class="paneB" id="pane5"></div>
-      <div class="paneC" id="pane6"></div>
-    </div>
-  </div>
-
-  <h3>Default SplitView (percent, size, minSize)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane7"></div>
-      <div class="paneB" id="pane8"></div>
-      <div class="paneC" id="pane9"></div>
-    </div>
-  </div>
-
-  <h3>Default SplitView (percent, snap)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane10"></div>
-      <div class="paneB" id="pane11"></div>
-      <div class="paneC" id="pane12"></div>
-    </div>
-  </div>
-
-  <h3>Default SplitView (percent, gutter absolute, vertical)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane13"></div>
-      <div class="paneB" id="pane14"></div>
-      <div class="paneC" id="pane15"></div>
-    </div>
-  </div>
-
-  <h3>Default SplitView (percent, gutter absolute, horizontal)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane16"></div>
-      <div class="paneB" id="pane17"></div>
-      <div class="paneC" id="pane18"></div>
-    </div>
-  </div>
-
-  <h3>Default SplitView (absolute, vertical)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane19"></div>
-      <div class="paneB" id="pane20"></div>
-      <div class="paneC" id="pane21"></div>
-    </div>
-  </div>
-
-  <h3>Default SplitView (absolute, horizontal)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane22"></div>
-      <div class="paneB" id="pane23"></div>
-      <div class="paneC" id="pane24"></div>
-    </div>
-  </div>
-
-  <h3>Default SplitView (absolute, size, minSize)</h3>
-  <div class="demo-container">
-    <div>
-      <div class="paneA" id="pane25"></div>
-      <div class="paneB" id="pane26"></div>
-      <div class="paneC" id="pane27"></div>
-    </div>
-  </div>
-
-  <div class="buttons">
-    <button id="collapse-animated2">Collapse left (animated)</button>
-    <button id="expand-animated2">Expand left (animated)</button>
-    <button id="is-collapsed">Is collapsed</button>
-    <button id="collapse-animated3">Collapse right (animated)</button>
-    <button id="expand-animated3">Expand right (animated)</button>
-    <br />
-    <button id="toggle-animated1">Toggle left (animated)</button>
-    <button id="toggle-animated2">Toggle right (animated)</button>
-  </div>
-
-  <script>
-    // Default SplitView (percent, vertical)
-    var sv1 = SplitView([
-      document.getElementById("pane1"),
-      document.getElementById("pane2"),
-      document.getElementById("pane3")
-    ], {
-      customGutterClassName: "my-gutter"
-    });
-
-    // Default SplitView (percent, horizontal)
-    SplitView([
-      document.getElementById("pane4"),
-      document.getElementById("pane5"),
-      document.getElementById("pane6")
-    ], {
-      customGutterClassName: "my-gutter",
-      direction: "horizontal"
-    });
-
-    // Default SplitView (percent, size, minSize)
-    SplitView([
-      {
-        element: document.getElementById("pane7"),
-        size: 30, // in %
-        minSize: 100 // in px
-      },
-      {
-        element: document.getElementById("pane8"),
-        size: 50, //%
-        minSize: 300 //px
-      },
-      {
-        element: document.getElementById("pane9"),
-        size: 20, //%
-        minSize: 30 //px
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SplitView</title>
+    <link rel="stylesheet" href="splitview.css" />
+    <script src="https://unpkg.com/split.js@1.6.5/dist/split.js"></script>
+    <script src="splitview.js"></script>
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
       }
-    ], {
-      customGutterClassName: "my-gutter"
-    });
 
-    // Default SplitView (percent, snap)
-    SplitView([
-      {
-        element: document.getElementById("pane10"),
-        size: 30, // in %
-        minSize: 20 // in px
-      },
-      {
-        element: document.getElementById("pane11"),
-        size: 50, //%
-        minSize: 20 //px
-      },
-      {
-        element: document.getElementById("pane12"),
-        size: 20, //%
-        minSize: 0 //px
+      body {
+        padding: 1rem;
       }
-    ], {
-      customGutterClassName: "my-gutter",
-      snapOffset: 30
-    });
 
-    // Default SplitView (percent, gutter absolute, vertical)
-    SplitView([
-      document.getElementById("pane13"),
-      document.getElementById("pane14"),
-      document.getElementById("pane15")
-    ], {
-      customGutterClassName: "my-gutter2",
-      gutterMode: "absolute"
-    });
-
-    // Default SplitView (percent, gutter absolute, horizontal)
-    SplitView([
-      document.getElementById("pane16"),
-      document.getElementById("pane17"),
-      document.getElementById("pane18")
-    ], {
-      customGutterClassName: "my-gutter2",
-      direction: "horizontal",
-      gutterMode: "absolute"
-    });
-
-    // Buttons
-    document.getElementById("collapse").addEventListener("click", function () {
-      sv1.collapsePaneAt(0);
-    });
-
-    document.getElementById("collapse-animated").addEventListener("click", function () {
-      sv1.collapsePaneAt(0, true);
-    });
-
-    document.getElementById("disable").addEventListener("click", function () {
-      sv1.disablePaneAt(0, true);
-    });
-
-    document.getElementById("destroy").addEventListener("click", function () {
-      sv1.destroy();
-    })
-
-    // Default SplitView (absolute, vertical)
-    var sv3 = SplitView([
-      document.getElementById("pane19"),
-      document.getElementById("pane20"),
-      document.getElementById("pane21")
-    ], {
-      customGutterClassName: "my-gutter2",
-      percent: false
-    });
-
-    // Default SplitView (absolute, horizontal)
-    SplitView([
-      document.getElementById("pane22"),
-      document.getElementById("pane23"),
-      document.getElementById("pane24")
-    ], {
-      customGutterClassName: "my-gutter2",
-      direction: "horizontal",
-      percent: false
-    });
-
-    // Default SplitView (absolute, size, minSize, span)
-    var sv2 = SplitView([
-      {
-        element: document.getElementById("pane25"),
-        size: "300px",
-        minSize: 50,
-        fallbackExpandSize: 300
-      },
-      {
-        element: document.getElementById("pane26"),
-        size: 0,
-        minSize: 200
-      },
-      {
-        element: document.getElementById("pane27"),
-        size: "20%",
-        minSize: 0
+      .demo-container {
+        height: 250px;
+        width: 100%;
+        margin-bottom: 30px;
       }
-    ], {
-      customGutterClassName: "my-gutter2",
-      percent: false,
-      snapOffset: 30
-    });
 
-    window.addEventListener("resize", () => {
-      sv2.invalidateSize();
-      sv3.invalidateSize();
-    });
+      .buttons {
+        margin-bottom: 30px;
+      }
 
-    // Buttons
-    document.getElementById("collapse-animated2").addEventListener("click", function () {
-      sv2.collapsePaneAt(0, true);
-    });
+      .paneA {
+        background-color: #e7f2f8;
+      }
 
-    document.getElementById("expand-animated2").addEventListener("click", function () {
-      sv2.expandPaneAt(0, 300, true);
-    });
+      .paneB {
+        background-color: #74bdcb;
+      }
 
-    document.getElementById("is-collapsed").addEventListener("click", function () {
-      alert("Pane is collapsed: " + (sv2.isCollapsedPaneAt(0) ? "true" : "false"))
-    });
+      .paneC {
+        background-color: #efe7bc;
+      }
 
-    document.getElementById("collapse-animated3").addEventListener("click", function () {
-      sv2.collapsePaneAt(2, true);
-    });
+      .my-gutter {
+        background-color: #ffa384;
+      }
 
-    document.getElementById("expand-animated3").addEventListener("click", function () {
-      sv2.expandPaneAt(2, 300, true);
-    });
+      .my-gutter2 {
+        background-color: #ffa384;
+        opacity: 0.1;
+      }
+    </style>
+  </head>
 
-    document.getElementById("toggle-animated1").addEventListener("click", function () {
-      sv2.togglePaneAt(0, null, true);
-    });
+  <body>
+    <h3>Default SplitView (percent, vertical)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane1"></div>
+        <div class="paneB" id="pane2"></div>
+        <div class="paneC" id="pane3"></div>
+      </div>
+    </div>
 
-    document.getElementById("toggle-animated2").addEventListener("click", function () {
-      sv2.togglePaneAt(2, null, true);
-    });
-  </script>
-</body>
+    <div class="buttons">
+      <button id="collapse">Collapse pane</button>
+      <button id="collapse-animated">Collapse (animated)</button>
+      <button id="disable">Disable pane</button>
+      <button id="destroy">Destroy</button>
+    </div>
 
+    <h3>Default SplitView (percent, horizontal)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane4"></div>
+        <div class="paneB" id="pane5"></div>
+        <div class="paneC" id="pane6"></div>
+      </div>
+    </div>
+
+    <h3>Default SplitView (percent, size, minSize)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane7"></div>
+        <div class="paneB" id="pane8"></div>
+        <div class="paneC" id="pane9"></div>
+      </div>
+    </div>
+
+    <h3>Default SplitView (percent, snap)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane10"></div>
+        <div class="paneB" id="pane11"></div>
+        <div class="paneC" id="pane12"></div>
+      </div>
+    </div>
+
+    <h3>Default SplitView (percent, gutter absolute, vertical)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane13"></div>
+        <div class="paneB" id="pane14"></div>
+        <div class="paneC" id="pane15"></div>
+      </div>
+    </div>
+
+    <h3>Default SplitView (percent, gutter absolute, horizontal)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane16"></div>
+        <div class="paneB" id="pane17"></div>
+        <div class="paneC" id="pane18"></div>
+      </div>
+    </div>
+
+    <h3>Default SplitView (absolute, vertical)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane19"></div>
+        <div class="paneB" id="pane20"></div>
+        <div class="paneC" id="pane21"></div>
+      </div>
+    </div>
+
+    <h3>Default SplitView (absolute, horizontal)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane22"></div>
+        <div class="paneB" id="pane23"></div>
+        <div class="paneC" id="pane24"></div>
+      </div>
+    </div>
+
+    <h3>Default SplitView (absolute, size, minSize)</h3>
+    <div class="demo-container">
+      <div>
+        <div class="paneA" id="pane25"></div>
+        <div class="paneB" id="pane26"></div>
+        <div class="paneC" id="pane27"></div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="collapse-animated2">Collapse left (animated)</button>
+      <button id="expand-animated2">Expand left (animated)</button>
+      <button id="is-collapsed">Is collapsed</button>
+      <button id="collapse-animated3">Collapse right (animated)</button>
+      <button id="expand-animated3">Expand right (animated)</button>
+      <br />
+      <button id="toggle-animated1">Toggle left (animated)</button>
+      <button id="toggle-animated2">Toggle right (animated)</button>
+    </div>
+
+    <script>
+      // Default SplitView (percent, vertical)
+      var sv1 = SplitView(
+        [
+          document.getElementById('pane1'),
+          document.getElementById('pane2'),
+          document.getElementById('pane3')
+        ],
+        {
+          customGutterClassName: 'my-gutter'
+        }
+      );
+
+      // Default SplitView (percent, horizontal)
+      SplitView(
+        [
+          document.getElementById('pane4'),
+          document.getElementById('pane5'),
+          document.getElementById('pane6')
+        ],
+        {
+          customGutterClassName: 'my-gutter',
+          direction: 'horizontal'
+        }
+      );
+
+      // Default SplitView (percent, size, minSize)
+      SplitView(
+        [
+          {
+            element: document.getElementById('pane7'),
+            size: 30, // in %
+            minSize: 100 // in px
+          },
+          {
+            element: document.getElementById('pane8'),
+            size: 50, //%
+            minSize: 300 //px
+          },
+          {
+            element: document.getElementById('pane9'),
+            size: 20, //%
+            minSize: 30 //px
+          }
+        ],
+        {
+          customGutterClassName: 'my-gutter'
+        }
+      );
+
+      // Default SplitView (percent, snap)
+      SplitView(
+        [
+          {
+            element: document.getElementById('pane10'),
+            size: 30, // in %
+            minSize: 20 // in px
+          },
+          {
+            element: document.getElementById('pane11'),
+            size: 50, //%
+            minSize: 20 //px
+          },
+          {
+            element: document.getElementById('pane12'),
+            size: 20, //%
+            minSize: 0 //px
+          }
+        ],
+        {
+          customGutterClassName: 'my-gutter',
+          snapOffset: 30
+        }
+      );
+
+      // Default SplitView (percent, gutter absolute, vertical)
+      SplitView(
+        [
+          document.getElementById('pane13'),
+          document.getElementById('pane14'),
+          document.getElementById('pane15')
+        ],
+        {
+          customGutterClassName: 'my-gutter2',
+          gutterMode: 'absolute'
+        }
+      );
+
+      // Default SplitView (percent, gutter absolute, horizontal)
+      SplitView(
+        [
+          document.getElementById('pane16'),
+          document.getElementById('pane17'),
+          document.getElementById('pane18')
+        ],
+        {
+          customGutterClassName: 'my-gutter2',
+          direction: 'horizontal',
+          gutterMode: 'absolute'
+        }
+      );
+
+      // Buttons
+      document
+        .getElementById('collapse')
+        .addEventListener('click', function () {
+          sv1.collapsePaneAt(0);
+        });
+
+      document
+        .getElementById('collapse-animated')
+        .addEventListener('click', function () {
+          sv1.collapsePaneAt(0, true);
+        });
+
+      document.getElementById('disable').addEventListener('click', function () {
+        sv1.disablePaneAt(0, true);
+      });
+
+      document.getElementById('destroy').addEventListener('click', function () {
+        sv1.destroy();
+      });
+
+      // Default SplitView (absolute, vertical)
+      var sv3 = SplitView(
+        [
+          document.getElementById('pane19'),
+          document.getElementById('pane20'),
+          document.getElementById('pane21')
+        ],
+        {
+          customGutterClassName: 'my-gutter2',
+          percent: false
+        }
+      );
+
+      // Default SplitView (absolute, horizontal)
+      SplitView(
+        [
+          document.getElementById('pane22'),
+          document.getElementById('pane23'),
+          document.getElementById('pane24')
+        ],
+        {
+          customGutterClassName: 'my-gutter2',
+          direction: 'horizontal',
+          percent: false
+        }
+      );
+
+      // Default SplitView (absolute, size, minSize, span)
+      var sv2 = SplitView(
+        [
+          {
+            element: document.getElementById('pane25'),
+            size: '300px',
+            minSize: 50,
+            fallbackExpandSize: 300
+          },
+          {
+            element: document.getElementById('pane26'),
+            size: 0,
+            minSize: 200
+          },
+          {
+            element: document.getElementById('pane27'),
+            size: '20%',
+            minSize: 0
+          }
+        ],
+        {
+          customGutterClassName: 'my-gutter2',
+          percent: false,
+          snapOffset: 30
+        }
+      );
+
+      window.addEventListener('resize', () => {
+        sv2.invalidateSize();
+        sv3.invalidateSize();
+      });
+
+      // Buttons
+      document
+        .getElementById('collapse-animated2')
+        .addEventListener('click', function () {
+          sv2.collapsePaneAt(0, true);
+        });
+
+      document
+        .getElementById('expand-animated2')
+        .addEventListener('click', function () {
+          sv2.expandPaneAt(0, 300, true);
+        });
+
+      document
+        .getElementById('is-collapsed')
+        .addEventListener('click', function () {
+          alert(
+            'Pane is collapsed: ' +
+              (sv2.isCollapsedPaneAt(0) ? 'true' : 'false')
+          );
+        });
+
+      document
+        .getElementById('collapse-animated3')
+        .addEventListener('click', function () {
+          sv2.collapsePaneAt(2, true);
+        });
+
+      document
+        .getElementById('expand-animated3')
+        .addEventListener('click', function () {
+          sv2.expandPaneAt(2, 300, true);
+        });
+
+      document
+        .getElementById('toggle-animated1')
+        .addEventListener('click', function () {
+          sv2.togglePaneAt(0, null, true);
+        });
+
+      document
+        .getElementById('toggle-animated2')
+        .addEventListener('click', function () {
+          sv2.togglePaneAt(2, null, true);
+        });
+    </script>
+  </body>
 </html>

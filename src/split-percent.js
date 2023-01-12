@@ -1,26 +1,26 @@
-import Split from "split.js"
-import { isDefined } from "./utils"
+import Split from 'split.js';
+import { isDefined } from './utils';
 
 const GutterMode = Object.freeze({
-  Embed: "embed",
-  Absolute: "absolute"
-})
+  Embed: 'embed',
+  Absolute: 'absolute'
+});
 
 const Direction = Object.freeze({
-  Horizontal: "horizontal",
-  Vertical: "vertical"
-})
+  Horizontal: 'horizontal',
+  Vertical: 'vertical'
+});
 
 const defaultOptions = {
   expandToMin: false,
   gutterSize: 4,
-  gutterAlign: "center",
+  gutterAlign: 'center',
   gutterMode: GutterMode.Embed,
   snapOffset: 0,
   dragInterval: 1,
   animationDuration: 300,
   direction: Direction.Vertical,
-  cursor: "col-resize",
+  cursor: 'col-resize',
   createGutter: null,
   elementStyle: null,
   gutterStyle: null,
@@ -28,7 +28,7 @@ const defaultOptions = {
   onDrag: null,
   onDragEnd: null,
   onResize: null
-}
+};
 
 const defaultPaneOptions = {
   id: null,
@@ -36,22 +36,22 @@ const defaultPaneOptions = {
   size: 0,
   minSize: 0,
   disabled: false
-}
+};
 
 const defaultClassNames = {
-  containerClassName: "sp-splitview",
-  horizontalClassName: "sp-splitview--horizontal",
-  verticalClassName: "sp-splitview--vertical",
-  paneClassName: "sp-splitview__pane",
-  paneAnimatedClassName: "sp-splitview__pane--animated",
-  paneCollapsingClassName: "sp-splitview__pane--collapsing",
-  paneExpandingClassName: "sp-splitview__pane--expanding",
-  gutterClassName: "sp-splitview__gutter",
-  gutterAbsoluteClassName: "sp-splitview__gutter--absolute",
-  gutterEmbedClassName: "sp-splitview__gutter--embed",
-  gutterDisabledClassName: "sp-splitview__gutter--disabled",
+  containerClassName: 'sp-splitview',
+  horizontalClassName: 'sp-splitview--horizontal',
+  verticalClassName: 'sp-splitview--vertical',
+  paneClassName: 'sp-splitview__pane',
+  paneAnimatedClassName: 'sp-splitview__pane--animated',
+  paneCollapsingClassName: 'sp-splitview__pane--collapsing',
+  paneExpandingClassName: 'sp-splitview__pane--expanding',
+  gutterClassName: 'sp-splitview__gutter',
+  gutterAbsoluteClassName: 'sp-splitview__gutter--absolute',
+  gutterEmbedClassName: 'sp-splitview__gutter--embed',
+  gutterDisabledClassName: 'sp-splitview__gutter--disabled',
   customGutterClassName: null
-}
+};
 
 class SplitPercent {
   constructor(panes, options) {
@@ -82,14 +82,14 @@ class SplitPercent {
         return {
           ...defaultPaneOptions,
           element: pane
-        }
+        };
       } else {
         return {
           ...defaultPaneOptions,
           ...pane
-        }
+        };
       }
-    })
+    });
   }
 
   createSplitter(panes, options) {
@@ -101,9 +101,9 @@ class SplitPercent {
     splitOptions.gutterAlign = options.gutterAlign;
 
     if (options.direction === Direction.Vertical) {
-      splitOptions.direction = "horizontal";
+      splitOptions.direction = 'horizontal';
     } else {
-      splitOptions.direction = "vertical";
+      splitOptions.direction = 'vertical';
     }
 
     if (options.gutterMode === GutterMode.Absolute) {
@@ -152,7 +152,7 @@ class SplitPercent {
     let gutterElement = this.options.createGutter?.();
 
     if (!gutterElement) {
-      gutterElement = document.createElement("div");
+      gutterElement = document.createElement('div');
     }
 
     gutterElement.classList.add(this.options.gutterClassName);
@@ -172,18 +172,23 @@ class SplitPercent {
   }
 
   setElementStyle(dimension, size, gutterSize, index) {
-    const customProps = this.options.elementStyle?.(dimension, size, gutterSize, index);
+    const customProps = this.options.elementStyle?.(
+      dimension,
+      size,
+      gutterSize,
+      index
+    );
 
     if (this.isGutterAbsolute) {
       return {
-        "flex-basis": `${size}%`,
+        'flex-basis': `${size}%`,
         ...customProps
-      }
+      };
     } else {
       return {
-        "flex-basis": `calc(${size}% - ${gutterSize}px)`,
+        'flex-basis': `calc(${size}% - ${gutterSize}px)`,
         ...customProps
-      }
+      };
     }
   }
 
@@ -193,19 +198,19 @@ class SplitPercent {
     if (this.isGutterAbsolute) {
       return {
         [dimension]: `${this.options.gutterSize}px`,
-        [dimension === "width" ? "left" : "top"]: "0",
+        [dimension === 'width' ? 'left' : 'top']: '0',
         ...customProps
-      }
+      };
     } else {
       return {
-        "flex-basis": `${gutterSize}px`,
+        'flex-basis': `${gutterSize}px`,
         ...customProps
-      }
+      };
     }
   }
 
   updateGutters(paneSizes) {
-    const prop = this.options.direction === Direction.Vertical ? "left" : "top";
+    const prop = this.options.direction === Direction.Vertical ? 'left' : 'top';
     const halfGutSize = this.options.gutterSize / 2;
     let accumulatedSize = 0;
 
@@ -214,7 +219,9 @@ class SplitPercent {
 
       if (isDefined(paneSizes[i])) {
         accumulatedSize += paneSizes[i];
-        gutterElement.style[prop] = `calc(${accumulatedSize}% - ${halfGutSize}px)`;
+        gutterElement.style[
+          prop
+        ] = `calc(${accumulatedSize}% - ${halfGutSize}px)`;
       }
     }
   }
@@ -225,7 +232,7 @@ class SplitPercent {
 
   collapsePaneAt(index, animated = false) {
     if (animated) {
-      this.preparePaneAnimation("collapsing");
+      this.preparePaneAnimation('collapsing');
     }
 
     this.splitter.collapse(index);
@@ -266,7 +273,8 @@ class SplitPercent {
 
     for (let i = 0; i < pairs.length; i++) {
       const pair = pairs[i];
-      const disabled = this.panes[pair.a]?.disabled || this.panes[pair.b]?.disabled;
+      const disabled =
+        this.panes[pair.a]?.disabled || this.panes[pair.b]?.disabled;
       this.disableGutter(pair.gutter, disabled);
     }
   }
@@ -278,7 +286,7 @@ class SplitPercent {
       if (value) {
         classList.add(this.options.gutterDisabledClassName);
       } else {
-        classList.remove(this.options.gutterDisabledClassName)
+        classList.remove(this.options.gutterDisabledClassName);
       }
     }
   }
@@ -296,9 +304,9 @@ class SplitPercent {
       const paneElement = this.panes[i].element;
       paneElement.classList.add(this.options.paneAnimatedClassName);
 
-      if (name === "collapsing") {
+      if (name === 'collapsing') {
         paneElement.classList.add(this.options.paneCollapsingClassName);
-      } else if (name === "expanding") {
+      } else if (name === 'expanding') {
         paneElement.classList.add(this.options.paneExpandingClassName);
       }
     }
